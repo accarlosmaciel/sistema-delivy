@@ -3,20 +3,21 @@ import { X, CheckCircle, Clock, ChefHat, Bike, Home, MessageCircle, Copy, Check,
 import { RESTAURANT_INFO } from '../data/products';
 
 export default function OrderTrackerModal({ isOpen, onClose, order, onNewOrder }) {
-  if (!isOpen || !order) return null;
-
   // Simulate status progression over time for demonstration
   const [currentStep, setCurrentStep] = useState(1); // 0: recebido, 1: preparando, 2: em transito, 3: entregue
   const [copied, setCopied] = useState(false);
   const [minutesLeft, setMinutesLeft] = useState(35);
 
   useEffect(() => {
+    if (!isOpen || !order) return;
     const timer = setInterval(() => {
       setMinutesLeft((prev) => (prev > 1 ? prev - 1 : 1));
     }, 60000); // Reduce every minute
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isOpen, order]);
+
+  if (!isOpen || !order) return null;
 
   const steps = [
     { label: 'Recebido', icon: <CheckCircle size={18} /> },
@@ -27,7 +28,7 @@ export default function OrderTrackerModal({ isOpen, onClose, order, onNewOrder }
 
   // Generate WhatsApp order message string
   const formatWhatsAppMessage = () => {
-    let msg = `*🍔 NOVO PEDIDO: ${order.orderId}*\n`;
+    let msg = `*DELIVY GOURMET - NOVO PEDIDO: #${order.orderId}*\n`;
     msg += `*Cliente:* ${order.customer.name} (${order.customer.phone})\n`;
     msg += `*Entrega:* ${order.deliveryType === 'delivery' ? 'Delivery' : 'Retirada no Local'}\n`;
     if (order.deliveryType === 'delivery') {

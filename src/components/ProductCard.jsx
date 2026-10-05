@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Minus, Check } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 
 export default function ProductCard({ product, cartQty, onAddToCart, onRemoveFromCart, onClickCard }) {
   return (

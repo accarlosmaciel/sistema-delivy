@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, MapPin, QrCode, CreditCard, DollarSign, ShoppingBag, ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
+import { X, MapPin, Clock, QrCode, CreditCard, DollarSign, ShoppingBag, ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { RESTAURANT_INFO } from '../data/products';
 
@@ -13,8 +13,6 @@ export default function CheckoutModal({
   finalTotal,
   onOrderPlaced
 }) {
-  if (!isOpen) return null;
-
   const [deliveryType, setDeliveryType] = useState('delivery'); // 'delivery' | 'pickup'
   const [paymentMethod, setPaymentMethod] = useState('pix'); // 'pix' | 'card' | 'cash'
   
@@ -29,6 +27,8 @@ export default function CheckoutModal({
   });
 
   const [errors, setErrors] = useState({});
+
+  if (!isOpen) return null;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -233,8 +233,14 @@ export default function CheckoutModal({
                 fontSize: '0.85rem',
                 color: 'var(--text-secondary)' 
               }}>
-                📍 Endereço para retirada: <strong>{RESTAURANT_INFO.address}</strong>
-                <br />⏱️ Tempo estimado para apronto: <strong>20 - 30 minutos</strong>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <MapPin size={15} style={{ color: 'var(--primary)', flexShrink: 0 }} />
+                  <span>Endereço para retirada: <strong>{RESTAURANT_INFO.address}</strong></span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Clock size={15} style={{ color: 'var(--primary)', flexShrink: 0 }} />
+                  <span>Tempo estimado para apronto: <strong>20 - 30 minutos</strong></span>
+                </div>
               </div>
             )}
           </div>

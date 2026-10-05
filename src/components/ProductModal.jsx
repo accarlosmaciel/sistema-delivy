@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { X, Plus, Minus } from 'lucide-react';
 
 export default function ProductModal({ product, onClose, onConfirmAdd }) {
-  if (!product) return null;
-
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [notes, setNotes] = useState('');
+
+  if (!product) return null;
 
   // Handle single option choice (radio)
   const handleOptionSelect = (groupTitle, optionName) => {

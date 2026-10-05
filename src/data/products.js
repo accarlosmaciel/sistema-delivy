@@ -15,14 +15,14 @@ export const RESTAURANT_INFO = {
 };
 
 export const CATEGORIES = [
-  { id: "all", name: "Todos", icon: "✨" },
-  { id: "destaques", name: "Mais Pedidos", icon: "🔥" },
-  { id: "burgers", name: "Burgers Artesanais", icon: "🍔" },
-  { id: "pizzas", name: "Pizzas Forno a Lenha", icon: "🍕" },
-  { id: "porcoes", name: "Porções & Fritas", icon: "🍟" },
-  { id: "bebidas", name: "Bebidas & Shakes", icon: "🥤" },
-  { id: "sobremesas", name: "Sobremesas", icon: "🍰" },
-  { id: "combos", name: "Combos & Ofertas", icon: "🏷️" }
+  { id: "all", name: "Todos", icon: "Sparkles" },
+  { id: "destaques", name: "Mais Pedidos", icon: "Flame" },
+  { id: "burgers", name: "Burgers Artesanais", icon: "Hamburger" },
+  { id: "pizzas", name: "Pizzas Forno a Lenha", icon: "Pizza" },
+  { id: "porcoes", name: "Porções & Fritas", icon: "UtensilsCrossed" },
+  { id: "bebidas", name: "Bebidas & Shakes", icon: "CupSoda" },
+  { id: "sobremesas", name: "Sobremesas", icon: "CakeSlice" },
+  { id: "combos", name: "Combos & Ofertas", icon: "Tag" }
 ];
 
 export const PRODUCTS = [

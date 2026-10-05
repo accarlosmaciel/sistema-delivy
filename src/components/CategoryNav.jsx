@@ -1,8 +1,9 @@
 import React from 'react';
 import { Search } from 'lucide-react';
 import { CATEGORIES } from '../data/products';
+import CategoryIcon from './CategoryIcon';
 
-export default function CategoryNav({ activeCategory, onSelectCategory, searchTerm, setSearchTerm, productsCount }) {
+export default function CategoryNav({ activeCategory, onSelectCategory, searchTerm, setSearchTerm }) {
   return (
     <>
       {/* Search Input */}
@@ -28,7 +29,7 @@ export default function CategoryNav({ activeCategory, onSelectCategory, searchTe
               className={`category-btn ${activeCategory === cat.id ? 'active' : ''}`}
               onClick={() => onSelectCategory(cat.id)}
             >
-              <span>{cat.icon}</span>
+              <CategoryIcon name={cat.icon} size={18} />
               <span>{cat.name}</span>
             </button>
           ))}

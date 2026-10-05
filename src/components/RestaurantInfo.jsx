@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Clock, MapPin, Truck, Info } from 'lucide-react';
+import { Star, Clock, MapPin, Truck, Info, PartyPopper } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/products';
 
 export default function RestaurantInfo({ cartSubtotal }) {
@@ -63,10 +63,15 @@ export default function RestaurantInfo({ cartSubtotal }) {
             marginBottom: '6px',
             color: 'var(--text-secondary)'
           }}>
-            <span>
-              {remainingForFreeDelivery === 0 
-                ? '🎉 Parabéns! Você ganhou FRETE GRÁTIS!' 
-                : `Faltam R$ ${remainingForFreeDelivery.toFixed(2).replace('.', ',')} para FRETE GRÁTIS!`}
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              {remainingForFreeDelivery === 0 ? (
+                <>
+                  <PartyPopper size={16} style={{ color: 'var(--success)' }} />
+                  <span>Parabéns! Você ganhou FRETE GRÁTIS!</span>
+                </>
+              ) : (
+                <span>Faltam R$ {remainingForFreeDelivery.toFixed(2).replace('.', ',')} para FRETE GRÁTIS!</span>
+              )}
             </span>
             <span style={{ fontWeight: 700, color: 'var(--primary)' }}>
               R$ {cartSubtotal.toFixed(2).replace('.', ',')} / R$ {freeDeliveryMin.toFixed(2)}

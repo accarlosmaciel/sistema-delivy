@@ -1,16 +1,36 @@
-# React + Vite
+# 🍔 Delivy - Sistema de Cardápio Digital & Delivery
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Sistema moderno, responsivo e intuitivo de autoatendimento e cardápio digital para hamburguerias, pizzarias e restaurantes artesanais, construído com **React 19**, **Vite** e **CSS Moderno**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Principais Funcionalidades
 
-## React Compiler
+- **Catálogo Interativo**: Navegação por categorias dinâmicas, busca em tempo real e visualização de ofertas.
+- **Customização Completa de Produtos**: Escolha de pontos da carne, múltiplos adicionais com cálculo automático e campo de observações.
+- **Carrinho Inteligente**: Barra de progresso para frete grátis (R$ 70,00), suporte a cupons de desconto (`PRIMEIRACOMPRA`, `FRETELIVRE`, `DELIVY10`) e persistência no `localStorage`.
+- **Checkout Dinâmico**: Escolha entre Delivery ou Retirada, validação de campos, desconto de 5% no Pix com cópia de chave e suporte a cartão/dinheiro.
+- **Order Tracker (Acompanhamento em Tempo Real)**: Linha do tempo visual (Recebido, Preparando, Em Trânsito, Entregue) e botão de envio automático do pedido formatado para o **WhatsApp** do restaurante.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 📖 Documentação Completa & Diagramas UML
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+A documentação detalhada do projeto, com todos os requisitos, visão arquitetural e **diagramas completos** (Casos de Uso, Sequência, Atividades, Ciclo de Vida, Classes e Objetos), está disponível em:
+
+👉 **[Consulte a DOCUMENTACAO.md](./DOCUMENTACAO.md)**
+
+---
+
+## 🛠️ Como Executar
+
+```bash
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
+npm run dev
+
+# Gerar build de produção
+npm run build
+```

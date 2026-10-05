@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import RestaurantInfo from './components/RestaurantInfo';
@@ -8,8 +10,9 @@ import CartDrawer from './components/CartDrawer';
 import CheckoutModal from './components/CheckoutModal';
 import OrderTrackerModal from './components/OrderTrackerModal';
 import Toast from './components/Toast';
+import CategoryIcon from './components/CategoryIcon';
 import { PRODUCTS, CATEGORIES, RESTAURANT_INFO } from './data/products';
-import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -142,7 +145,7 @@ export default function App() {
     setIsCheckoutOpen(false);
     setIsCartOpen(false);
     setIsTrackerOpen(true);
-    showToast(`Pedido #${newOrder.orderId} realizado com sucesso! 🎉`);
+    showToast(`Pedido #${newOrder.orderId} realizado com sucesso!`);
   };
 
   const showToast = (msg) => {
@@ -195,9 +198,13 @@ export default function App() {
       {/* Main Cardápio Grid */}
       <main>
         <div className="section-header">
-          <h2 className="section-title">
-            {CATEGORIES.find((c) => c.id === activeCategory)?.icon} {' '}
-            {CATEGORIES.find((c) => c.id === activeCategory)?.name || 'Cardápio'}
+          <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <CategoryIcon 
+              name={CATEGORIES.find((c) => c.id === activeCategory)?.icon} 
+              size={22} 
+              style={{ color: 'var(--primary)' }} 
+            />
+            <span>{CATEGORIES.find((c) => c.id === activeCategory)?.name || 'Cardápio'}</span>
           </h2>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             {filteredProducts.length} {filteredProducts.length === 1 ? 'produto' : 'produtos'}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShoppingBag, Trash2, Plus, Minus, ArrowRight, Tag, CheckCircle2 } from 'lucide-react';
+import { X, ShoppingBag, Trash2, Plus, Minus, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { RESTAURANT_INFO, PROMO_COUPONS } from '../data/products';
 
 export default function CartDrawer({
@@ -7,16 +7,16 @@ export default function CartDrawer({
   onClose,
   cartItems,
   onUpdateQty,
-  onRemoveItem,
+  _onRemoveItem,
   onClearCart,
   onProceedToCheckout,
   appliedCoupon,
   setAppliedCoupon
 }) {
-  if (!isOpen) return null;
-
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
+
+  if (!isOpen) return null;
 
   // Subtotal calculation
   const subtotal = cartItems.reduce((acc, item) => {
@@ -106,7 +106,7 @@ export default function CartDrawer({
                       {/* Render options & notes summary */}
                       {item.selectedOptions && Object.keys(item.selectedOptions).length > 0 && (
                         <div className="cart-item-details">
-                          {Object.entries(item.selectedOptions).map(([key, val], oIdx) => {
+                          {Object.entries(item.selectedOptions).map(([_key, val], oIdx) => {
                             if (Array.isArray(val)) {
                               return val.map((v, i) => <div key={i}>+ {v.name}</div>);
                             }

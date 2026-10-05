@@ -19,18 +19,12 @@ export default function App() {
   const [searchTerm, setSearchTerm] = useState('');
   
   // Cart state stored in localStorage for persistence
-  const [cartItems, setCartItems] = useState(() => {
-    const saved = localStorage.getItem('delivy_cart');
-    return saved ? JSON.parse(saved) : [];
-  });
-
+  const [cartItems, setCartItems] = useState([]);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   // Active Order state
-  const [activeOrder, setActiveOrder] = useState(() => {
-    const saved = localStorage.getItem('delivy_active_order');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [activeOrder, setActiveOrder] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Modals state
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -41,19 +35,43 @@ export default function App() {
   // Toast notification
   const [toastMessage, setToastMessage] = useState('');
 
+  // Load persisted state safely on client mount
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem('delivy_cart');
+      if (savedCart) setCartItems(JSON.parse(savedCart));
+
+      const savedOrder = localStorage.getItem('delivy_active_order');
+      if (savedOrder) setActiveOrder(JSON.parse(savedOrder));
+    } catch (e) {
+      console.error('Erro ao carregar do localStorage:', e);
+    }
+    setIsLoaded(true);
+  }, []);
+
   // Persist cart
   useEffect(() => {
-    localStorage.setItem('delivy_cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem('delivy_cart', JSON.stringify(cartItems));
+    } catch (e) {
+      console.error('Erro ao salvar carrinho:', e);
+    }
+  }, [cartItems, isLoaded]);
 
   // Persist active order
   useEffect(() => {
-    if (activeOrder) {
-      localStorage.setItem('delivy_active_order', JSON.stringify(activeOrder));
-    } else {
-      localStorage.removeItem('delivy_active_order');
+    if (!isLoaded) return;
+    try {
+      if (activeOrder) {
+        localStorage.setItem('delivy_active_order', JSON.stringify(activeOrder));
+      } else {
+        localStorage.removeItem('delivy_active_order');
+      }
+    } catch (e) {
+      console.error('Erro ao salvar pedido:', e);
     }
-  }, [activeOrder]);
+  }, [activeOrder, isLoaded]);
 
   // Total calculation
   const cartSubtotal = cartItems.reduce((sum, item) => {

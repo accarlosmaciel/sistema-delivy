@@ -3377,7 +3377,834 @@ button, input, select, textarea {
   line-height: 1.3;
 }
 
+/* Floating Cart Bar */
+.mobile-cart-bar {
+  position: fixed;
+  bottom: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 448px;
+  background: #ea1d2c;
+  color: #ffffff;
+  padding: 14px 18px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  z-index: 90;
+  box-shadow: 0 8px 28px rgba(234, 29, 44, 0.4);
+  font-size: 0.95rem;
+  animation: slideUpCart 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
+@keyframes slideUpCart {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
 
+/* ==========================================================================
+   RESPONSIVE DESIGN — Desktop Web & Mobile App
+   ========================================================================== */
 
+/* ── TABLET (≥ 768px) ── */
+@media (min-width: 768px) {
+  /* Container: expand beyond mobile 480px */
+  .delivy-mobile-container {
+    max-width: 960px;
+    box-shadow: none;
+    background-color: var(--bg-main);
+  }
+
+  /* Top Bar: wider padding, larger text */
+  .home-top-bar {
+    padding: 16px 32px 12px 32px;
+    background: #ffffff;
+    border-bottom: 1px solid #e4e4e7;
+    border-radius: 0;
+  }
+
+  .greeting-text {
+    font-size: 0.88rem;
+  }
+
+  .address-text {
+    font-size: 1.05rem;
+  }
+
+  .club-badge-btn,
+  .notification-bell-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* Categories Grid: single row with more breathing room */
+  .home-categories-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px 8px;
+    padding: 20px 32px 24px 32px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cat-icon-wrapper {
+    width: 62px;
+    height: 62px;
+  }
+
+  .cat-svg {
+    width: 56px;
+    height: 56px;
+  }
+
+  .cat-label {
+    font-size: 0.78rem;
+    margin-top: 6px;
+  }
+
+  /* Hero Banner: taller, more dramatic */
+  .hero-carousel-wrapper {
+    padding: 0 32px;
+  }
+
+  .hero-banner-card {
+    min-height: 180px;
+    border-radius: 24px;
+    padding: 22px 28px;
+  }
+
+  .banner-heading-tudo {
+    font-size: 2.8rem;
+  }
+
+  .banner-price-tag .price-big {
+    font-size: 3.2rem;
+  }
+
+  .banner-left-food-showcase {
+    width: 175px;
+    height: 130px;
+  }
+
+  .dish-queijo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .dish-carne {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Promo Highlights */
+  .promo-highlights-section {
+    padding: 4px 32px 20px 32px;
+  }
+
+  .promo-highlight-card {
+    min-width: 130px;
+    width: 130px;
+    height: 165px;
+    border-radius: 18px;
+    padding: 14px 12px 10px 12px;
+  }
+
+  .promo-card-title {
+    font-size: 0.82rem;
+  }
+
+  .promo-card-image-box {
+    height: 80px;
+  }
+
+  /* Famous Brands */
+  .famous-brands-section {
+    padding: 0 32px 22px 32px;
+  }
+
+  .famous-brand-item {
+    min-width: 88px;
+    max-width: 88px;
+  }
+
+  .brand-circle {
+    width: 76px;
+    height: 76px;
+  }
+
+  /* Catalog Section */
+  .catalog-section-container {
+    padding: 0 32px;
+    margin-top: 10px;
+  }
+
+  /* Product Grid: 2 columns */
+  .delivy-mobile-container .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .delivy-mobile-container .product-card {
+    border-radius: 18px;
+  }
+
+  .delivy-mobile-container .product-img-wrapper {
+    width: 96px;
+    min-width: 96px;
+    height: 96px;
+    border-radius: 14px;
+  }
+
+  /* Bottom Nav: still present on tablet */
+  .bottom-nav-bar {
+    max-width: 960px;
+  }
+
+  /* Modals: centered, larger */
+  .modal-sheet-content {
+    max-width: 560px;
+    border-radius: 24px;
+    max-height: 80vh;
+  }
+
+  .modal-backdrop {
+    align-items: center;
+  }
+
+  /* Mobile Cart Bar */
+  .mobile-cart-bar {
+    max-width: 960px;
+  }
+}
+
+/* ── DESKTOP (≥ 1024px) ── */
+@media (min-width: 1024px) {
+  body {
+    background-color: #f0f0f2;
+  }
+
+  /* Container: full desktop width */
+  .delivy-mobile-container {
+    max-width: 1200px;
+    background-color: #ffffff;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.06);
+    border-radius: 0 0 24px 24px;
+  }
+
+  /* Top Bar: desktop navigation style */
+  .home-top-bar {
+    padding: 16px 48px 14px 48px;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+  }
+
+  .greeting-text {
+    font-size: 0.9rem;
+  }
+
+  .address-text {
+    font-size: 1.1rem;
+  }
+
+  .home-top-actions {
+    gap: 12px;
+  }
+
+  .club-badge-btn,
+  .notification-bell-btn {
+    width: 44px;
+    height: 44px;
+    transition: transform 0.2s ease, background 0.2s, box-shadow 0.2s;
+  }
+
+  .club-badge-btn:hover {
+    box-shadow: 0 4px 16px rgba(147, 51, 234, 0.2);
+  }
+
+  .notification-bell-btn:hover {
+    background: #e4e4e7;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .header-cart-pill {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+
+  .header-cart-pill:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 20px rgba(234, 29, 44, 0.35);
+  }
+
+  /* Categories Grid: all 10 in single row on wide desktop */
+  .home-categories-grid {
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px 6px;
+    padding: 24px 48px 28px 48px;
+    max-width: none;
+    background: #ffffff;
+  }
+
+  .cat-grid-item:hover {
+    transform: translateY(-4px);
+  }
+
+  .cat-icon-wrapper {
+    width: 64px;
+    height: 64px;
+  }
+
+  .cat-svg {
+    width: 58px;
+    height: 58px;
+  }
+
+  .cat-label {
+    font-size: 0.76rem;
+    margin-top: 8px;
+    font-weight: 700;
+  }
+
+  .cat-novo-badge {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+
+  /* Hero Banner: more dramatic, higher quality */
+  .hero-carousel-container {
+    padding: 0 0 20px 0;
+  }
+
+  .hero-carousel-wrapper {
+    padding: 0 48px;
+    gap: 14px;
+  }
+
+  .hero-banner-card {
+    min-height: 200px;
+    border-radius: 28px;
+    padding: 28px 36px;
+    box-shadow: 0 12px 36px rgba(255, 87, 34, 0.22);
+    transition: transform 0.25s ease, box-shadow 0.25s;
+  }
+
+  .hero-banner-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 44px rgba(255, 87, 34, 0.3);
+  }
+
+  .banner-heading-tudo {
+    font-size: 3rem;
+  }
+
+  .banner-price-tag .price-big {
+    font-size: 3.6rem;
+  }
+
+  .banner-price-tag .currency {
+    font-size: 1.3rem;
+  }
+
+  .banner-subtext {
+    font-size: 0.82rem;
+  }
+
+  .banner-brand-chip {
+    font-size: 9px;
+    padding: 3px 9px;
+  }
+
+  .banner-left-food-showcase {
+    width: 200px;
+    height: 150px;
+  }
+
+  .dish-queijo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .dish-carne {
+    width: 115px;
+    height: 115px;
+  }
+
+  .single-food-dish {
+    width: 115px;
+    height: 115px;
+  }
+
+  .hero-banner-peek {
+    width: 36px;
+  }
+
+  /* Promo Highlights */
+  .promo-highlights-section {
+    padding: 4px 48px 24px 48px;
+  }
+
+  .promo-highlight-card {
+    min-width: 155px;
+    width: 155px;
+    height: 185px;
+    border-radius: 20px;
+    padding: 16px 14px 12px 14px;
+    transition: transform 0.25s ease, box-shadow 0.25s;
+  }
+
+  .promo-highlight-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  }
+
+  .promo-card-title {
+    font-size: 0.85rem;
+  }
+
+  .promo-card-image-box {
+    height: 90px;
+    border-radius: 12px;
+  }
+
+  /* Famous Brands */
+  .famous-brands-section {
+    padding: 0 48px 28px 48px;
+  }
+
+  .famous-brands-title {
+    font-size: 1.25rem;
+  }
+
+  .famous-brand-item {
+    min-width: 96px;
+    max-width: 96px;
+    transition: transform 0.2s ease;
+  }
+
+  .famous-brand-item:hover {
+    transform: translateY(-4px);
+  }
+
+  .brand-circle {
+    width: 84px;
+    height: 84px;
+    border-width: 2.5px;
+    transition: box-shadow 0.2s;
+  }
+
+  .famous-brand-item:hover .brand-circle {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+
+  .famous-brand-name {
+    font-size: 0.78rem;
+    margin-top: 8px;
+  }
+
+  /* Catalog Section: desktop layout */
+  .catalog-section-container {
+    padding: 0 48px;
+    margin-top: 16px;
+  }
+
+  .search-bar-wrapper {
+    max-width: 500px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    transition: all 0.25s;
+  }
+
+  .search-bar-wrapper:focus-within {
+    box-shadow: 0 0 0 4px rgba(234, 29, 44, 0.12);
+  }
+
+  .search-bar-input {
+    font-size: 0.95rem;
+  }
+
+  /* Section Header */
+  .section-header {
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .products-count-label {
+    font-size: 0.88rem;
+  }
+
+  /* Product Grid: 3 columns on desktop */
+  .delivy-mobile-container .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    padding: 0;
+  }
+
+  .delivy-mobile-container .product-card {
+    border-radius: 18px;
+    padding: 14px;
+    gap: 16px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #f0f0f2;
+  }
+
+  .delivy-mobile-container .product-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(234, 29, 44, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .delivy-mobile-container .product-img-wrapper {
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
+    border-radius: 14px;
+  }
+
+  .delivy-mobile-container .product-name {
+    font-size: 0.96rem;
+  }
+
+  .delivy-mobile-container .product-desc {
+    font-size: 0.78rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .delivy-mobile-container .current-price {
+    font-size: 1.08rem;
+  }
+
+  .delivy-mobile-container .add-btn {
+    padding: 7px 16px;
+    font-size: 0.82rem;
+    transition: all 0.2s;
+  }
+
+  .delivy-mobile-container .add-btn:hover {
+    transform: scale(1.04);
+  }
+
+  /* Category Pills */
+  .delivy-mobile-container .category-nav-wrapper {
+    padding: 10px 0 16px 0;
+    margin-bottom: 14px;
+  }
+
+  .delivy-mobile-container .category-btn {
+    padding: 9px 18px;
+    font-size: 0.85rem;
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+
+  .delivy-mobile-container .category-btn:hover {
+    background: #e4e4e7;
+  }
+
+  .delivy-mobile-container .category-btn.active:hover {
+    background: #d31826;
+  }
+
+  /* BOTTOM NAV: HIDDEN on desktop */
+  .bottom-nav-bar {
+    display: none;
+  }
+
+  /* Remove bottom padding since no bottom nav */
+  .delivy-mobile-container {
+    padding-bottom: 40px;
+  }
+
+  /* Mobile Cart Bar: desktop styled */
+  .mobile-cart-bar {
+    max-width: 1200px;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    padding: 16px 28px;
+    box-shadow: 0 12px 40px rgba(234, 29, 44, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin: 0 48px;
+    width: calc(100% - 96px);
+  }
+
+  .mobile-cart-bar:hover {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 16px 48px rgba(234, 29, 44, 0.42);
+  }
+
+  /* Modals: desktop centered dialog style */
+  .modal-backdrop {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-sheet-content {
+    max-width: 580px;
+    border-radius: 24px;
+    max-height: 85vh;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+    animation: modalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes modalScaleIn {
+    from {
+      transform: scale(0.92);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .modal-sheet-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .modal-close-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .modal-close-btn:hover {
+    background: #ea1d2c;
+    color: #ffffff;
+    transform: rotate(90deg);
+    transition: all 0.3s;
+  }
+
+  /* Empty catalog */
+  .empty-catalog-box {
+    padding: 60px 24px;
+  }
+
+  .empty-title {
+    font-size: 1.15rem;
+  }
+
+  .empty-sub {
+    font-size: 0.9rem;
+  }
+
+  /* Toast on desktop: top-right */
+  .toast-bar {
+    bottom: auto;
+    top: 24px;
+    right: 24px;
+    left: auto;
+    transform: none;
+    max-width: 380px;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* ── EXTRA WIDE DESKTOP (≥ 1440px) ── */
+@media (min-width: 1440px) {
+  .delivy-mobile-container {
+    max-width: 1320px;
+  }
+
+  .home-top-bar {
+    padding: 18px 64px 14px 64px;
+  }
+
+  .home-categories-grid {
+    padding: 28px 64px 32px 64px;
+    gap: 12px 10px;
+  }
+
+  .cat-icon-wrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .cat-svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  .hero-carousel-wrapper {
+    padding: 0 64px;
+  }
+
+  .hero-banner-card {
+    min-height: 220px;
+    padding: 32px 42px;
+  }
+
+  .promo-highlights-section {
+    padding: 4px 64px 28px 64px;
+  }
+
+  .famous-brands-section {
+    padding: 0 64px 32px 64px;
+  }
+
+  .catalog-section-container {
+    padding: 0 64px;
+  }
+
+  /* Product Grid: 4 columns on ultra-wide */
+  .delivy-mobile-container .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .mobile-cart-bar {
+    max-width: 1320px;
+    margin: 0 64px;
+    width: calc(100% - 128px);
+    padding: 18px 36px;
+  }
+}
+
+/* ── MOBILE SPECIFIC (< 768px) ── */
+@media (max-width: 767px) {
+  /* Ensure mobile stays as app-like format */
+  .delivy-mobile-container {
+    max-width: 480px;
+    background-color: #ffffff;
+    box-shadow: 0 0 45px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Floating Cart Bar */
+  .mobile-cart-bar {
+    position: fixed;
+    bottom: 68px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 448px;
+    background: #ea1d2c;
+    color: #ffffff;
+    padding: 14px 18px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    z-index: 90;
+    box-shadow: 0 8px 28px rgba(234, 29, 44, 0.4);
+    font-size: 0.95rem;
+    animation: slideUpCart 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUpCart {
+    from {
+      transform: translateX(-50%) translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Bottom Nav visible on mobile */
+  .bottom-nav-bar {
+    display: flex;
+    max-width: 480px;
+  }
+
+  /* Toast at bottom on mobile */
+  .toast-bar {
+    bottom: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+  }
+}
+
+/* ── SMALL MOBILE (< 400px) ── */
+@media (max-width: 399px) {
+  .delivy-mobile-container {
+    max-width: 100%;
+  }
+
+  .home-top-bar {
+    padding: 12px 12px 8px 12px;
+  }
+
+  .home-categories-grid {
+    gap: 10px 0px;
+    padding: 10px 8px 14px 8px;
+  }
+
+  .cat-icon-wrapper {
+    width: 46px;
+    height: 46px;
+  }
+
+  .cat-svg {
+    width: 42px;
+    height: 42px;
+  }
+
+  .cat-label {
+    font-size: 0.68rem;
+  }
+
+  .hero-carousel-wrapper {
+    padding: 0 12px;
+  }
+
+  .hero-banner-card {
+    min-height: 130px;
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+
+  .banner-heading-tudo {
+    font-size: 2rem;
+  }
+
+  .banner-price-tag .price-big {
+    font-size: 2.4rem;
+  }
+
+  .banner-left-food-showcase {
+    width: 120px;
+    height: 95px;
+  }
+
+  .promo-highlights-section {
+    padding: 4px 12px 16px 12px;
+  }
+
+  .famous-brands-section {
+    padding: 0 12px 18px 12px;
+  }
+
+  .catalog-section-container {
+    padding: 0 12px;
+  }
+
+  .bottom-nav-bar {
+    max-width: 100%;
+  }
+
+  .mobile-cart-bar {
+    max-width: calc(100% - 24px);
+  }
+}
 

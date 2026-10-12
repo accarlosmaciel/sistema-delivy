@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { HERO_BANNERS } from '../data/products';
 
 export default function HeroBanner({ onBannerClick }) {
@@ -13,11 +14,30 @@ export default function HeroBanner({ onBannerClick }) {
   }, []);
 
   const currentBanner = HERO_BANNERS[currentIndex] || HERO_BANNERS[0];
-  const nextBanner = HERO_BANNERS[(currentIndex + 1) % HERO_BANNERS.length] || HERO_BANNERS[0];
+
+  const handlePrev = (e) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev - 1 + HERO_BANNERS.length) % HERO_BANNERS.length);
+  };
+
+  const handleNext = (e) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev + 1) % HERO_BANNERS.length);
+  };
 
   return (
     <div className="hero-carousel-container">
       <div className="hero-carousel-wrapper">
+        {/* Navigation Arrow Left */}
+        <button 
+          type="button"
+          className="hero-nav-arrow arrow-left" 
+          onClick={handlePrev} 
+          aria-label="Banner anterior"
+        >
+          <ChevronLeft size={22} />
+        </button>
+
         {/* Main Active Banner Card */}
         <div 
           className="hero-banner-card"
@@ -38,11 +58,11 @@ export default function HeroBanner({ onBannerClick }) {
             </svg>
           </div>
 
-          {/* Left Visual: Delicious Real Food Photos Composition */}
+          {/* Left Visual: Delicious Food Photos Composition */}
           <div className="banner-left-food-showcase">
             {currentBanner.foodPhotos && currentBanner.foodPhotos.length > 1 ? (
               <div className="esfihas-duo-composition">
-                {/* Cheese Esfiha (Top Right) */}
+                {/* Top / Background Esfiha */}
                 <div className="esfiha-real-dish dish-queijo">
                   <div className="dish-crust-rim">
                     <img 
@@ -53,7 +73,7 @@ export default function HeroBanner({ onBannerClick }) {
                   </div>
                 </div>
 
-                {/* Meat Esfiha (Bottom Left, in front) */}
+                {/* Bottom / Front Esfiha */}
                 <div className="esfiha-real-dish dish-carne">
                   <div className="dish-crust-rim">
                     <img 
@@ -95,30 +115,26 @@ export default function HeroBanner({ onBannerClick }) {
           </div>
         </div>
 
-        {/* Peek of the Next Banner on the Right */}
-        <div 
-          className="hero-banner-peek"
-          onClick={() => setCurrentIndex((prev) => (prev + 1) % HERO_BANNERS.length)}
-          style={{
-            background: nextBanner.secondaryBg || '#ff5252'
-          }}
-          title="Ver próxima oferta"
+        {/* Navigation Arrow Right */}
+        <button 
+          type="button"
+          className="hero-nav-arrow arrow-right" 
+          onClick={handleNext} 
+          aria-label="Próximo banner"
         >
-          <div className="peek-content">
-            <span className="peek-title">{nextBanner.title}</span>
-          </div>
-        </div>
+          <ChevronRight size={22} />
+        </button>
       </div>
 
-      {/* 6 Pagination Indicator Dots */}
+      {/* Pagination Indicator Dots */}
       <div className="hero-dots-row">
-        {[0, 1, 2, 3, 4, 5].map((idx) => {
-          const isActive = idx === (currentIndex % 6);
+        {HERO_BANNERS.map((_, idx) => {
+          const isActive = idx === currentIndex;
           return (
             <button
               key={idx}
               className={`hero-dot ${isActive ? 'active' : ''}`}
-              onClick={() => setCurrentIndex(idx % HERO_BANNERS.length)}
+              onClick={() => setCurrentIndex(idx)}
               aria-label={`Ir para banner ${idx + 1}`}
             />
           );

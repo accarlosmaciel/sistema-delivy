@@ -1,8 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import RestaurantInfo from './components/RestaurantInfo';
+import React, { useState, useEffect, useRef } from 'react';
+import HomeHeader from './components/HomeHeader';
+import HomeCategories from './components/HomeCategories';
+import HeroBanner from './components/HeroBanner';
+
+import BottomNavBar from './components/BottomNavBar';
+import AddressModal from './components/AddressModal';
+import ClubVipModal from './components/ClubVipModal';
+import NotificationDrawer from './components/NotificationDrawer';
+import ProfileDrawer from './components/ProfileDrawer';
 import CategoryNav from './components/CategoryNav';
 import ProductCard from './components/ProductCard';
 import ProductModal from './components/ProductModal';
@@ -11,12 +18,14 @@ import CheckoutModal from './components/CheckoutModal';
 import OrderTrackerModal from './components/OrderTrackerModal';
 import Toast from './components/Toast';
 import CategoryIcon from './components/CategoryIcon';
-import { PRODUCTS, CATEGORIES, RESTAURANT_INFO } from './data/products';
-import { ArrowRight } from 'lucide-react';
+import { PRODUCTS, CATEGORIES, RESTAURANT_INFO, PROMO_COUPONS } from './data/products';
+import { ArrowRight, Search, Sparkles } from 'lucide-react';
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('inicio');
+  const [currentAddress, setCurrentAddress] = useState('R. RSP 24, 35');
   
   // Cart state stored in localStorage for persistence
   const [cartItems, setCartItems] = useState([]);
@@ -31,9 +40,17 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isTrackerOpen, setIsTrackerOpen] = useState(false);
+  const [isAddressOpen, setIsAddressOpen] = useState(false);
+  const [isClubOpen, setIsClubOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(1);
   
   // Toast notification
   const [toastMessage, setToastMessage] = useState('');
+
+  const searchInputRef = useRef(null);
+  const catalogRef = useRef(null);
 
   // Load persisted state safely on client mount
   useEffect(() => {
@@ -43,6 +60,9 @@ export default function App() {
 
       const savedOrder = localStorage.getItem('delivy_active_order');
       if (savedOrder) setActiveOrder(JSON.parse(savedOrder));
+
+      const savedAddress = localStorage.getItem('delivy_address');
+      if (savedAddress) setCurrentAddress(savedAddress);
     } catch (e) {
       console.error('Erro ao carregar do localStorage:', e);
     }
@@ -73,6 +93,15 @@ export default function App() {
     }
   }, [activeOrder, isLoaded]);
 
+  // Persist address
+  const handleSelectAddress = (addr) => {
+    setCurrentAddress(addr);
+    try {
+      localStorage.setItem('delivy_address', addr);
+    } catch (e) {}
+    showToast(`Endereço atualizado: ${addr}`);
+  };
+
   // Total calculation
   const cartSubtotal = cartItems.reduce((sum, item) => {
     return sum + (item.totalPrice || item.product.price * item.quantity);
@@ -95,7 +124,6 @@ export default function App() {
 
   // Handlers
   const handleQuickAdd = (product) => {
-    // If product has required options, open modal for options
     if (product.options && product.options.some((o) => o.required)) {
       setSelectedProduct(product);
       return;
@@ -111,7 +139,7 @@ export default function App() {
       return [...prev, { product, quantity: 1, totalPrice: product.price }];
     });
 
-    showToast(`"${product.name}" adicionado ao carrinho!`);
+    showToast(`"${product.name}" adicionado ao pedido!`);
   };
 
   const handleRemoveFromCart = (productId) => {
@@ -134,7 +162,7 @@ export default function App() {
       ...prev,
       { product, quantity, selectedOptions, notes, totalPrice }
     ]);
-    showToast(`"${product.name}" personalizado adicionado!`);
+    showToast(`"${product.name}" adicionado com personalizações!`);
   };
 
   const handleUpdateQty = (index, newQty) => {
@@ -170,6 +198,71 @@ export default function App() {
     setToastMessage(msg);
   };
 
+  const handleSelectHomeCategory = (categoryId) => {
+    // Map home category clicks
+    if (categoryId === 'restaurantes') {
+      setActiveCategory('burgers');
+    } else if (categoryId === 'bebidas') {
+      setActiveCategory('bebidas');
+    } else if (categoryId === 'promocoes') {
+      setActiveCategory('destaques');
+    } else if (categoryId === 'gourmet') {
+      setActiveCategory('pizzas');
+    } else if (categoryId === 'ver_mais') {
+      setActiveCategory('all');
+    } else {
+      setActiveCategory('all');
+    }
+
+    if (catalogRef.current) {
+      catalogRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handlePromoFilter = (filterKey) => {
+    if (filterKey === 'esfihas') {
+      setActiveCategory('esfihas');
+    } else if (filterKey === 'padaria') {
+      setActiveCategory('padaria');
+    } else if (filterKey === 'japonesa') {
+      setActiveCategory('japonesa');
+    } else {
+      setActiveCategory('destaques');
+    }
+
+    if (catalogRef.current) {
+      catalogRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleApplyCouponCode = (code) => {
+    const coupon = PROMO_COUPONS[code];
+    if (coupon) {
+      setAppliedCoupon(coupon);
+      showToast(`Cupom ${code} ativado com sucesso!`);
+    }
+  };
+
+  const handleBottomTab = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'inicio') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (tab === 'busca') {
+      if (catalogRef.current) {
+        catalogRef.current.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => searchInputRef.current?.focus(), 300);
+      }
+    } else if (tab === 'pedidos') {
+      if (activeOrder) {
+        setIsTrackerOpen(true);
+      } else {
+        showToast('Nenhum pedido em andamento no momento.');
+      }
+    } else if (tab === 'perfil') {
+      setIsProfileOpen(true);
+    }
+  };
+
   // Filter products by category and search term
   const filteredProducts = PRODUCTS.filter((product) => {
     const matchesCategory = 
@@ -189,50 +282,82 @@ export default function App() {
   });
 
   return (
-    <div className="app-container">
-      {/* Top Navigation Bar */}
-      <Header
+    <div className="delivy-mobile-container">
+      {/* 1. Top Bar: Greeting, Address Selector, VIP Club, Notification Bell */}
+      <HomeHeader
+        currentAddress={currentAddress}
+        userName="Carlos"
+        unreadNotifications={unreadNotifications}
+        onOpenAddress={() => setIsAddressOpen(true)}
+        onOpenClub={() => setIsClubOpen(true)}
+        onOpenNotifications={() => {
+          setIsNotificationsOpen(true);
+          setUnreadNotifications(0);
+        }}
         cartCount={cartCount}
         cartTotal={finalTotal}
         onOpenCart={() => setIsCartOpen(true)}
-        onOpenTracker={() => setIsTrackerOpen(true)}
-        activeOrder={activeOrder}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
       />
 
-      {/* Restaurant Hero & Infos */}
-      <RestaurantInfo cartSubtotal={cartSubtotal} />
-
-      {/* Search & Category Pills */}
-      <CategoryNav
+      {/* 2. Quick Categories (Restaurantes, Mercados, Bebidas, etc.) */}
+      <HomeCategories
         activeCategory={activeCategory}
-        onSelectCategory={setActiveCategory}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        productsCount={filteredProducts.length}
+        onSelectCategory={handleSelectHomeCategory}
       />
 
-      {/* Main Cardápio Grid */}
-      <main>
+      {/* 3. Hero Carousel Banner ("tudo a partir de R$ 0,90") */}
+      <HeroBanner 
+        onBannerClick={handlePromoFilter} 
+      />
+
+      {/* 6. Search Bar & Cardápio / Restaurantes Catalog */}
+      <section className="catalog-section-container" ref={catalogRef}>
+        <div className="search-bar-wrapper">
+          <Search size={18} className="search-bar-icon" />
+          <input
+            ref={searchInputRef}
+            type="text"
+            className="search-bar-input"
+            placeholder="Buscar em pratos, esfihas ou bebidas..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button className="search-clear-btn" onClick={() => setSearchTerm('')}>
+              ×
+            </button>
+          )}
+        </div>
+
+        {/* Category Pills Navigation */}
+        <CategoryNav
+          activeCategory={activeCategory}
+          onSelectCategory={setActiveCategory}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          productsCount={filteredProducts.length}
+        />
+
+        {/* Products Section Header */}
         <div className="section-header">
-          <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <h2 className="section-title">
             <CategoryIcon 
-              name={CATEGORIES.find((c) => c.id === activeCategory)?.icon} 
-              size={22} 
-              style={{ color: 'var(--primary)' }} 
+              name={CATEGORIES.find((c) => c.id === activeCategory)?.icon || 'Sparkles'} 
+              size={20} 
+              style={{ color: '#ea1d2c' }} 
             />
-            <span>{CATEGORIES.find((c) => c.id === activeCategory)?.name || 'Cardápio'}</span>
+            <span>{CATEGORIES.find((c) => c.id === activeCategory)?.name || 'Destaques'}</span>
           </h2>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'produto' : 'produtos'}
+          <span className="products-count-label">
+            {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'itens'}
           </span>
         </div>
 
+        {/* Products Grid */}
         {filteredProducts.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 24px', color: 'var(--text-muted)' }}>
-            <p style={{ fontSize: '1.1rem', marginBottom: '8px' }}>Nenhum produto encontrado</p>
-            <p style={{ fontSize: '0.88rem' }}>Tente pesquisar por outros termos ou mudar de categoria.</p>
+          <div className="empty-catalog-box">
+            <p className="empty-title">Nenhum produto encontrado</p>
+            <p className="empty-sub">Tente pesquisar por outro termo ou escolha outra categoria acima.</p>
           </div>
         ) : (
           <div className="products-grid">
@@ -254,16 +379,16 @@ export default function App() {
             })}
           </div>
         )}
-      </main>
+      </section>
 
-      {/* Mobile Floating Bottom Cart Bar */}
+      {/* Floating Cart Button for Mobile if Cart has items */}
       {cartCount > 0 && !isCartOpen && (
         <div className="mobile-cart-bar" onClick={() => setIsCartOpen(true)}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span className="cart-badge" style={{ background: '#fff', color: 'var(--primary)' }}>
+            <span className="cart-badge-counter">
               {cartCount}
             </span>
-            <span style={{ fontWeight: 700 }}>Ver Seu Pedido</span>
+            <span style={{ fontWeight: 700 }}>Ver Sacola</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800 }}>
             <span>R$ {finalTotal.toFixed(2).replace('.', ',')}</span>
@@ -271,6 +396,43 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* 7. Bottom Navigation Bar: Início, Busca, Pedidos, Perfil */}
+      <BottomNavBar
+        activeTab={activeTab}
+        onSelectTab={handleBottomTab}
+        activeOrderCount={activeOrder ? 1 : 0}
+        hasProfileNotification={true}
+      />
+
+      {/* Modals & Drawers */}
+      <AddressModal
+        isOpen={isAddressOpen}
+        onClose={() => setIsAddressOpen(false)}
+        currentAddress={currentAddress}
+        onSelectAddress={handleSelectAddress}
+      />
+
+      <ClubVipModal
+        isOpen={isClubOpen}
+        onClose={() => setIsClubOpen(false)}
+        onApplyCoupon={handleApplyCouponCode}
+      />
+
+      <NotificationDrawer
+        isOpen={isNotificationsOpen}
+        onClose={() => setIsNotificationsOpen(false)}
+        onSelectPromo={handlePromoFilter}
+      />
+
+      <ProfileDrawer
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        userName="Carlos"
+        currentAddress={currentAddress}
+        onOpenAddress={() => setIsAddressOpen(true)}
+        onOpenClub={() => setIsClubOpen(true)}
+      />
 
       {/* Product Customization Modal */}
       {selectedProduct && (

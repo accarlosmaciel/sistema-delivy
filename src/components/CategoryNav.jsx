@@ -6,19 +6,6 @@ import CategoryIcon from './CategoryIcon';
 export default function CategoryNav({ activeCategory, onSelectCategory, searchTerm, setSearchTerm }) {
   return (
     <>
-      {/* Search Input */}
-      <div className="search-container">
-        <div className="search-input-wrapper">
-          <Search size={18} className="search-icon" />
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Buscar por nome do produto ou ingrediente (ex: bacon, gorgonzola, pizza...)"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
 
       {/* Category Scroll Bar */}
       <div className="category-nav-wrapper">

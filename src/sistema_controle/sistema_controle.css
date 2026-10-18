@@ -720,39 +720,6 @@
   transform: translateY(-1px);
 }
 
-/* Botão discreto quando bloqueado (visão cliente comum) */
-.view-switcher-locked-container {
-  position: fixed;
-  bottom: 80px;
-  right: 18px;
-  z-index: 999;
-}
-
-.view-switcher-lock-btn {
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #94a3b8;
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.view-switcher-lock-btn:hover {
-  color: #fff;
-  background: #ea580c;
-  border-color: #ea580c;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.45);
-}
-
 /* Modais do Sistema de Gestão */
 .admin-modal-overlay {
   position: fixed;

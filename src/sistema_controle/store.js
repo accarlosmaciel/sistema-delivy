@@ -326,7 +326,20 @@ export const CentralStore = {
     if (typeof window === 'undefined') return INITIAL_PRODUCTS;
     try {
       const saved = localStorage.getItem(KEYS.PRODUCTS);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const missing = INITIAL_PRODUCTS.filter(ip => !parsed.some(p => p.id === ip.id));
+        if (missing.length > 0) {
+          const merged = [...parsed, ...missing.map((p, idx) => ({
+            ...p,
+            stock: p.stock !== undefined ? p.stock : 25,
+            isAvailable: p.isAvailable !== false
+          }))];
+          localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(merged));
+          return merged;
+        }
+        return parsed;
+      }
       // Inicializar com estoque padrão
       const seeded = INITIAL_PRODUCTS.map((p, idx) => ({
         ...p,

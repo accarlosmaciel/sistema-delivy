@@ -15,16 +15,16 @@ export const RESTAURANT_INFO = {
 };
 
 export const HOME_CATEGORIES = [
-  { id: "restaurantes", name: "Restaurantes", icon: "burger", color: "#ffefe5" },
-  { id: "mercados", name: "Mercados", icon: "market", color: "#e8f5e9" },
-  { id: "farmacias", name: "Farmácias", icon: "pharmacy", color: "#e3f2fd" },
-  { id: "bebidas", name: "Bebida gelada", icon: "drinks", badge: "Novo", color: "#ffebee" },
-  { id: "petshops", name: "Pet Shops", icon: "pet", color: "#fce4ec" },
-  { id: "corridas", name: "Corridas", icon: "uber", badge: "Novo", color: "#f3e8ff" },
-  { id: "promocoes", name: "Promoções", icon: "promo", badge: "Novo", color: "#ffebee" },
-  { id: "shopping", name: "Shopping", icon: "shopping", color: "#ede7f6" },
-  { id: "gourmet", name: "Gourmet", icon: "gourmet", color: "#fff3e0" },
-  { id: "ver_mais", name: "Ver mais", icon: "grid", color: "#f5f5f5" }
+  { id: "burgers", name: "Hambúrguer", icon: "burger", color: "#ffefe5" },
+  { id: "pizzas", name: "Pizza", icon: "pizza", color: "#fff3e0" },
+  { id: "esfihas", name: "Esfiha", icon: "esfiha", color: "#ffebee" },
+  { id: "refrigerante", name: "Refrigerante", icon: "refrigerante", color: "#e3f2fd" },
+  { id: "milkshake", name: "Milkshake", icon: "milkshake", badge: "Novo", color: "#ede7f6" },
+  { id: "soda_artesanal", name: "Soda Artesanal", icon: "soda", badge: "Refrescante", color: "#e0f2fe" },
+  { id: "porcoes", name: "Porções", icon: "fries", color: "#fef3c7" },
+  { id: "sobremesas", name: "Sobremesas", icon: "dessert", color: "#fce4ec" },
+  { id: "combos", name: "Combos", icon: "combo", badge: "Ofertas", color: "#ffebee" },
+  { id: "all", name: "Ver mais", icon: "grid", color: "#f5f5f5" }
 ];
 
 export const FAMOUS_BRANDS = [
@@ -197,15 +197,15 @@ export const PROMO_CARDS = [
 export const CATEGORIES = [
   { id: "all", name: "Todos", icon: "Sparkles" },
   { id: "destaques", name: "Mais Pedidos", icon: "Flame" },
-  { id: "esfihas", name: "Esfihas & Salgados", icon: "Utensils" },
-  { id: "burgers", name: "Burgers Artesanais", icon: "Hamburger" },
-  { id: "pizzas", name: "Pizzas Forno a Lenha", icon: "Pizza" },
-  { id: "padaria", name: "Padaria & Cafés", icon: "Coffee" },
-  { id: "japonesa", name: "Sushi & Oriental", icon: "Fish" },
-  { id: "porcoes", name: "Porções & Fritas", icon: "UtensilsCrossed" },
-  { id: "bebidas", name: "Bebidas & Shakes", icon: "CupSoda" },
+  { id: "burgers", name: "Hambúrguer", icon: "Hamburger" },
+  { id: "pizzas", name: "Pizza", icon: "Pizza" },
+  { id: "esfihas", name: "Esfiha", icon: "Utensils" },
+  { id: "refrigerante", name: "Refrigerante", icon: "CupSoda" },
+  { id: "milkshake", name: "Milkshake", icon: "IceCream" },
+  { id: "soda_artesanal", name: "Soda Artesanal", icon: "GlassWater" },
+  { id: "porcoes", name: "Porções", icon: "UtensilsCrossed" },
   { id: "sobremesas", name: "Sobremesas", icon: "CakeSlice" },
-  { id: "combos", name: "Combos & Ofertas", icon: "Tag" }
+  { id: "combos", name: "Combos", icon: "Tag" }
 ];
 
 export const PRODUCTS = [
@@ -487,11 +487,46 @@ export const PRODUCTS = [
     options: []
   },
 
-  // BEBIDAS
+  // REFRIGERANTES
   {
-    id: "d1",
+    id: "ref1",
+    name: "Coca-Cola Original Lata 350ml",
+    category: "refrigerante",
+    featured: true,
+    price: 6.90,
+    description: "Refrigerante Coca-Cola lata 350ml trincando de gelada.",
+    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=80",
+    badge: "Geladinha",
+    options: []
+  },
+  {
+    id: "ref2",
+    name: "Coca-Cola Zero Lata 350ml",
+    category: "refrigerante",
+    featured: false,
+    price: 6.90,
+    description: "Refrigerante Coca-Cola sem açúcar lata 350ml super refrescante.",
+    image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=800&q=80",
+    badge: "Sem Açúcar",
+    options: []
+  },
+  {
+    id: "ref3",
+    name: "Guaraná Antarctica Lata 350ml",
+    category: "refrigerante",
+    featured: false,
+    price: 6.50,
+    description: "Refrigerante de guaraná típico brasileiro, lata 350ml gelada.",
+    image: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80",
+    badge: "",
+    options: []
+  },
+
+  // MILKSHAKES
+  {
+    id: "milk1",
     name: "Milkshake Nutella com Ninho (400ml)",
-    category: "bebidas",
+    category: "milkshake",
     featured: true,
     price: 21.90,
     description: "Sorvete cremoso de baunilha batido com bastante Nutella original, leite Ninho e chantilly fresco com farofa de avelã.",
@@ -500,25 +535,60 @@ export const PRODUCTS = [
     options: []
   },
   {
-    id: "d2",
-    name: "Soda Artesanal de Frutas Vermelhas",
-    category: "bebidas",
+    id: "milk2",
+    name: "Milkshake de Morango com Chantilly & Cookies (400ml)",
+    category: "milkshake",
+    featured: true,
+    price: 22.90,
+    description: "Gelato artesanal de morango fresco, calda caseira com pedaços de fruta, chantilly e cookies crocantes.",
+    image: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80",
+    badge: "Mais Pedido",
+    options: []
+  },
+  {
+    id: "milk3",
+    name: "Milkshake Ovomaltine Crocante Supremo (400ml)",
+    category: "milkshake",
     featured: false,
+    price: 23.50,
+    description: "Sorvete de chocolate batido com calda de fudge belga e flocos crocantes de Ovomaltine.",
+    image: "https://images.unsplash.com/photo-1568909344668-6f14a07b56a0?auto=format&fit=crop&w=800&q=80",
+    badge: "Crocante",
+    options: []
+  },
+
+  // SODAS ARTESANAIS
+  {
+    id: "soda1",
+    name: "Soda Artesanal de Frutas Vermelhas (500ml)",
+    category: "soda_artesanal",
+    featured: true,
     price: 13.90,
-    description: "Infusão natural de morango, framboesa e amora com água com gás, gelo e hortelã fresca. Refrescante e 100% natural.",
+    description: "Infusão natural de morango, framboesa e amora com água com gás purificada, gelo e hortelã fresca. 100% natural e refrescante.",
     image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80",
     badge: "Refrescante",
     options: []
   },
   {
-    id: "d3",
-    name: "Coca-Cola Zero Lata 350ml",
-    category: "bebidas",
+    id: "soda2",
+    name: "Soda Italiana de Maçã Verde & Hortelã (500ml)",
+    category: "soda_artesanal",
     featured: false,
-    price: 6.50,
-    description: "Refrigerante lata 350ml geladinho.",
-    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=80",
-    badge: "",
+    price: 14.50,
+    description: "Xarope francês de maçã verde, água gaseificada, gelo filtrado e raminhos de hortelã fresca do jardim.",
+    image: "https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=800&q=80",
+    badge: "Exclusiva",
+    options: []
+  },
+  {
+    id: "soda3",
+    name: "Soda Tropical de Maracujá & Tangerina (500ml)",
+    category: "soda_artesanal",
+    featured: false,
+    price: 14.50,
+    description: "Polpa fresca de maracujá, xarope de tangerina artesanal, água gaseificada e rodelas cítricas.",
+    image: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=800&q=80",
+    badge: "Tropical",
     options: []
   },
 

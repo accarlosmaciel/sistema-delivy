@@ -7,7 +7,10 @@ import {
   UtensilsCrossed,
   CupSoda,
   CakeSlice,
-  Tag
+  Tag,
+  IceCream,
+  GlassWater,
+  Utensils
 } from 'lucide-react';
 
 const ICONS = {
@@ -19,11 +22,18 @@ const ICONS = {
   CupSoda,
   CakeSlice,
   Tag,
+  IceCream,
+  GlassWater,
+  Utensils,
   // Fallback mappings by category ID
   all: Sparkles,
   destaques: Flame,
   burgers: Hamburger,
   pizzas: Pizza,
+  esfihas: Utensils,
+  refrigerante: CupSoda,
+  milkshake: IceCream,
+  soda_artesanal: GlassWater,
   porcoes: UtensilsCrossed,
   bebidas: CupSoda,
   sobremesas: CakeSlice,

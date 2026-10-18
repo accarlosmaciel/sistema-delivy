@@ -232,20 +232,8 @@ export default function App() {
   };
 
   const handleSelectHomeCategory = (categoryId) => {
-    // Map home category clicks
-    if (categoryId === 'restaurantes') {
-      setActiveCategory('burgers');
-    } else if (categoryId === 'bebidas') {
-      setActiveCategory('bebidas');
-    } else if (categoryId === 'promocoes') {
-      setActiveCategory('destaques');
-    } else if (categoryId === 'gourmet') {
-      setActiveCategory('pizzas');
-    } else if (categoryId === 'ver_mais') {
-      setActiveCategory('all');
-    } else {
-      setActiveCategory('all');
-    }
+    setActiveCategory(categoryId);
+    setSearchTerm('');
 
     if (catalogRef.current) {
       catalogRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -301,12 +289,23 @@ export default function App() {
 
   // Filter products by category and search term using the dynamic store
   const filteredProducts = productsList.filter((product) => {
-    const matchesCategory = 
-      activeCategory === 'all' 
-        ? true 
-        : activeCategory === 'destaques' 
-          ? product.featured 
-          : product.category === activeCategory;
+    let matchesCategory = false;
+    if (activeCategory === 'all') {
+      matchesCategory = true;
+    } else if (activeCategory === 'destaques') {
+      matchesCategory = !!product.featured;
+    } else if (activeCategory === 'refrigerante') {
+      matchesCategory = product.category === 'refrigerante' || 
+        (product.category === 'bebidas' && /coca|guaraná|fanta|sprite|refrigerante|lata/i.test(product.name));
+    } else if (activeCategory === 'milkshake') {
+      matchesCategory = product.category === 'milkshake' || 
+        (product.category === 'bebidas' && /milkshake|shake/i.test(product.name));
+    } else if (activeCategory === 'soda_artesanal') {
+      matchesCategory = product.category === 'soda_artesanal' || 
+        (product.category === 'bebidas' && /soda/i.test(product.name));
+    } else {
+      matchesCategory = product.category === activeCategory;
+    }
 
     const query = searchTerm.toLowerCase().trim();
     const matchesSearch = 

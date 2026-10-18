@@ -24,121 +24,160 @@ function CategorySvgIcon({ type }) {
           <rect x="14" y="42" width="36" height="8" rx="4" fill="#f59e0b" />
         </svg>
       );
-    case 'market':
+
+    case 'pizza':
       return (
         <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Red shopping basket */}
-          <path d="M14 26 L50 26 L45 52 L19 52 Z" fill="#ef4444" />
-          <path d="M14 26 L50 26" stroke="#b91c1c" strokeWidth="2.5" />
-          {/* Handle */}
-          <path d="M22 26 C22 12, 42 12, 42 26" stroke="#0284c7" strokeWidth="3" fill="none" strokeLinecap="round" />
-          {/* Groceries inside */}
-          <rect x="23" y="15" width="6" height="15" rx="3" fill="#f59e0b" transform="rotate(-15 26 22)" />
-          <circle cx="34" cy="20" r="5" fill="#22c55e" />
-          <circle cx="41" cy="22" r="4.5" fill="#e11d48" />
-          <rect x="18" y="34" width="28" height="2" fill="#b91c1c" />
-          <rect x="21" y="42" width="22" height="2" fill="#b91c1c" />
+          {/* Crust */}
+          <path d="M14 18 C26 12, 38 12, 50 18 L32 54 Z" fill="#f59e0b" />
+          <path d="M16 20 C27 15, 37 15, 48 20 L32 50 Z" fill="#fbbf24" />
+          {/* Melted cheese drips */}
+          <path d="M19 22 Q24 28 29 23 Q34 29 39 24 Q44 28 47 22" stroke="#fef08a" strokeWidth="2.5" fill="none" />
+          {/* Pepperoni slices */}
+          <circle cx="28" cy="27" r="4.5" fill="#dc2626" />
+          <circle cx="37" cy="33" r="4" fill="#dc2626" />
+          <circle cx="31" cy="41" r="3.5" fill="#dc2626" />
+          {/* Basil herbs */}
+          <circle cx="23" cy="25" r="1.5" fill="#16a34a" />
+          <circle cx="34" cy="24" r="1.5" fill="#16a34a" />
+          <circle cx="41" cy="27" r="1.5" fill="#16a34a" />
+          <circle cx="26" cy="35" r="1.5" fill="#16a34a" />
         </svg>
       );
-    case 'pharmacy':
+
+    case 'esfiha':
       return (
         <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Blue medicine bottle */}
-          <rect x="14" y="24" width="18" height="26" rx="4" fill="#38bdf8" />
-          <rect x="17" y="19" width="12" height="6" rx="2" fill="#0284c7" />
-          {/* Red/white bottle & pill */}
-          <rect x="34" y="28" width="18" height="22" rx="4" fill="#ef4444" />
-          <rect x="37" y="23" width="12" height="6" rx="2" fill="#e2e8f0" />
-          {/* Cross on bottle */}
-          <path d="M43 33 L43 45 M37 39 L49 39" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Golden dough base */}
+          <ellipse cx="32" cy="34" rx="20" ry="16" fill="#f59e0b" />
+          <ellipse cx="32" cy="34" rx="17" ry="13" fill="#fbbf24" />
+          {/* Savory meat filling */}
+          <ellipse cx="32" cy="34" rx="14" ry="10" fill="#78350f" />
+          <ellipse cx="32" cy="34" rx="11" ry="7" fill="#451a03" />
+          {/* Diced tomato and seasoning bits */}
+          <rect x="25" y="31" width="3" height="3" rx="1" fill="#ef4444" />
+          <rect x="33" y="34" width="3" height="3" rx="1" fill="#ef4444" />
+          <rect x="36" y="29" width="3" height="3" rx="1" fill="#fef08a" />
+          <circle cx="29" cy="35" r="1" fill="#22c55e" />
+          <circle cx="35" cy="32" r="1" fill="#22c55e" />
+          {/* Lemon slice */}
+          <path d="M38 18 C46 18, 50 24, 48 30 Z" fill="#84cc16" />
+          <path d="M40 20 C45 20, 48 24, 46 28 Z" fill="#bef264" />
         </svg>
       );
+
+    case 'refrigerante':
     case 'drinks':
       return (
         <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Red soda bottle */}
-          <path d="M21 16 L27 16 L29 25 L29 48 L19 48 L19 25 Z" fill="#dc2626" />
-          <rect x="22" y="13" width="4" height="4" fill="#ffffff" />
-          <rect x="19" y="30" width="10" height="8" fill="#ffffff" />
-          {/* Green can */}
-          <rect x="33" y="26" width="16" height="22" rx="3" fill="#059669" />
-          <ellipse cx="41" cy="26" rx="8" ry="2.5" fill="#10b981" />
-          <rect x="35" y="32" width="12" height="8" rx="1" fill="#f8fafc" />
-          <circle cx="41" cy="36" r="2.5" fill="#dc2626" />
+          {/* Soda can with classic red body */}
+          <rect x="20" y="18" width="24" height="36" rx="5" fill="#dc2626" />
+          {/* Silver top & bottom rims */}
+          <ellipse cx="32" cy="18" rx="12" ry="4" fill="#e2e8f0" />
+          <ellipse cx="32" cy="18" rx="10" ry="3" fill="#cbd5e1" />
+          <ellipse cx="32" cy="54" rx="12" ry="4" fill="#94a3b8" />
+          {/* White wave brand ribbon */}
+          <path d="M20 34 Q32 26 44 34 L44 40 Q32 32 20 40 Z" fill="#ffffff" />
+          {/* Refreshing ice cubes */}
+          <rect x="40" y="38" width="9" height="9" rx="2" fill="#38bdf8" opacity="0.85" transform="rotate(15 44 42)" />
+          <rect x="15" y="42" width="8" height="8" rx="2" fill="#38bdf8" opacity="0.85" transform="rotate(-12 19 46)" />
+          {/* Straw */}
+          <path d="M32 18 L36 8 L42 6" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" fill="none" />
         </svg>
       );
-    case 'pet':
+
+    case 'milkshake':
       return (
         <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Pet food red bag */}
-          <path d="M18 20 L46 20 L42 52 L22 52 Z" fill="#ef4444" />
-          <path d="M22 20 L28 14 L36 14 L42 20 Z" fill="#dc2626" />
-          {/* Paw print */}
-          <ellipse cx="32" cy="38" rx="4" ry="3" fill="#ffffff" />
-          <circle cx="27" cy="31" r="2" fill="#ffffff" />
-          <circle cx="37" cy="31" r="2" fill="#ffffff" />
-          <circle cx="32" cy="28" r="2" fill="#ffffff" />
-          {/* Dog bone */}
-          <rect x="38" y="44" width="16" height="4" rx="2" fill="#38bdf8" transform="rotate(-25 46 46)" />
-          <circle cx="38" cy="48" r="2.5" fill="#38bdf8" />
-          <circle cx="42" cy="44" r="2.5" fill="#38bdf8" />
-          <circle cx="50" cy="41" r="2.5" fill="#38bdf8" />
-          <circle cx="54" cy="45" r="2.5" fill="#38bdf8" />
+          {/* Tall glass cup */}
+          <path d="M22 24 L25 50 C25 52, 39 52, 39 50 L42 24 Z" fill="#ede9fe" stroke="#c4b5fd" strokeWidth="1.5" />
+          {/* Creamy strawberry shake inside */}
+          <path d="M23 27 L25 49 C25 51, 39 51, 39 49 L41 27 Z" fill="#f43f5e" />
+          <path d="M24 38 L25 49 C25 51, 39 51, 39 49 L40 38 Z" fill="#e11d48" />
+          {/* Whipped Cream */}
+          <path d="M22 25 Q24 16 32 14 Q40 16 42 25 Z" fill="#ffffff" />
+          <circle cx="32" cy="14" r="5" fill="#ffffff" />
+          {/* Cherry on top */}
+          <circle cx="32" cy="10" r="3.5" fill="#dc2626" />
+          <path d="M33 7 C35 3, 39 3, 40 5" stroke="#15803d" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+          {/* Straw */}
+          <path d="M26 24 L20 6" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
       );
-    case 'uber':
+
+    case 'soda':
+    case 'soda_artesanal':
       return (
         <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Black circle */}
-          <circle cx="32" cy="32" r="22" fill="#000000" />
-          <text x="32" y="34" fill="#ffffff" fontSize="10" fontWeight="900" textAnchor="middle" fontFamily="sans-serif">
-            Uber
-          </text>
+          {/* Tall soda glass with gradient layers */}
+          <path d="M20 18 L24 52 C24 54, 40 54, 40 52 L44 18 Z" fill="#e0f2fe" stroke="#38bdf8" strokeWidth="1.5" />
+          <path d="M21 24 L24 51 C24 53, 40 53, 40 51 L43 24 Z" fill="#06b6d4" />
+          <path d="M22 38 L24 51 C24 53, 40 53, 40 51 L42 38 Z" fill="#e11d48" />
+          {/* Ice cubes */}
+          <rect x="25" y="24" width="7" height="7" rx="1.5" fill="#ffffff" opacity="0.8" transform="rotate(10 28 27)" />
+          <rect x="32" y="30" width="6" height="6" rx="1.5" fill="#ffffff" opacity="0.8" transform="rotate(-15 35 33)" />
+          {/* Lemon wheel & mint */}
+          <circle cx="43" cy="18" r="7" fill="#eab308" />
+          <circle cx="43" cy="18" r="5" fill="#fef08a" />
+          <path d="M26 15 C22 10, 20 14, 25 18 Z" fill="#22c55e" />
+          <path d="M29 18 L32 8" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
       );
+
+    case 'fries':
+    case 'porcoes':
+      return (
+        <svg viewBox="0 0 64 64" className="cat-svg">
+          {/* Red French Fries Box */}
+          <path d="M18 28 L22 54 L42 54 L46 28 Z" fill="#ef4444" />
+          <path d="M18 28 C26 34, 38 34, 46 28" fill="#dc2626" />
+          {/* Golden fries sticks */}
+          <rect x="21" y="12" width="4" height="20" rx="1" fill="#f59e0b" transform="rotate(-8 23 22)" />
+          <rect x="26" y="8" width="4.5" height="24" rx="1" fill="#fbbf24" transform="rotate(-3 28 20)" />
+          <rect x="31" y="7" width="4.5" height="25" rx="1" fill="#f59e0b" transform="rotate(2 33 19)" />
+          <rect x="36" y="10" width="4.5" height="22" rx="1" fill="#fbbf24" transform="rotate(7 38 21)" />
+          <rect x="40" y="14" width="4" height="18" rx="1" fill="#f59e0b" transform="rotate(12 42 23)" />
+        </svg>
+      );
+
+    case 'dessert':
+    case 'sobremesas':
+      return (
+        <svg viewBox="0 0 64 64" className="cat-svg">
+          {/* Slice of chocolate cake / brownie */}
+          <path d="M14 38 L50 24 L50 44 L14 48 Z" fill="#451a03" />
+          <path d="M14 38 L32 18 L50 24 L32 44 Z" fill="#78350f" />
+          {/* Cream & Strawberry */}
+          <path d="M14 43 L50 29" stroke="#fbbf24" strokeWidth="2" />
+          <circle cx="32" cy="22" r="4" fill="#f43f5e" />
+          <circle cx="32" cy="22" r="2.5" fill="#e11d48" />
+        </svg>
+      );
+
+    case 'combo':
     case 'promo':
       return (
         <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Red promo ticket / bag with % */}
-          <rect x="18" y="16" width="28" height="34" rx="5" fill="#ef4444" />
-          <path d="M26 16 C26 10, 38 10, 38 16" stroke="#ffffff" strokeWidth="2.5" fill="none" />
-          <text x="32" y="38" fill="#ffffff" fontSize="16" fontWeight="900" textAnchor="middle" fontFamily="sans-serif">
+          {/* Combo box with ribbon */}
+          <rect x="16" y="20" width="32" height="30" rx="5" fill="#ea580c" />
+          <path d="M16 32 L48 32" stroke="#f97316" strokeWidth="3" />
+          <rect x="30" y="20" width="4" height="30" fill="#fef08a" />
+          <circle cx="32" cy="18" r="4" fill="#fef08a" />
+          <text x="32" y="44" fill="#ffffff" fontSize="14" fontWeight="900" textAnchor="middle" fontFamily="sans-serif">
             %
           </text>
         </svg>
       );
-    case 'shopping':
-      return (
-        <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Gift shopping bags */}
-          <rect x="18" y="24" width="28" height="26" rx="4" fill="#e11d48" />
-          <path d="M26 24 C26 16, 38 16, 38 24" stroke="#fbbf24" strokeWidth="3" fill="none" />
-          {/* Ribbon */}
-          <rect x="30" y="24" width="4" height="26" fill="#fbbf24" />
-          <path d="M18 36 L46 36" stroke="#fbbf24" strokeWidth="3" />
-        </svg>
-      );
-    case 'gourmet':
-      return (
-        <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* Black pan / platter with delicious food */}
-          <ellipse cx="32" cy="34" rx="20" ry="14" fill="#18181b" />
-          <ellipse cx="32" cy="34" rx="17" ry="11" fill="#f97316" />
-          <circle cx="28" cy="32" r="4" fill="#fbbf24" />
-          <ellipse cx="36" cy="35" rx="5" ry="3" fill="#ef4444" />
-          <circle cx="32" cy="30" r="2" fill="#22c55e" />
-          <circle cx="34" cy="38" r="2" fill="#22c55e" />
-        </svg>
-      );
+
     case 'grid':
     default:
       return (
         <svg viewBox="0 0 64 64" className="cat-svg">
-          {/* 4 squares icon */}
-          <rect x="17" y="17" width="12" height="12" rx="3" fill="#71717a" />
-          <rect x="35" y="17" width="12" height="12" rx="3" fill="#71717a" />
-          <rect x="17" y="35" width="12" height="12" rx="3" fill="#71717a" />
-          <rect x="35" y="35" width="12" height="12" rx="3" fill="#71717a" />
+          {/* 4 modern rounded squares */}
+          <rect x="17" y="17" width="12" height="12" rx="3" fill="#ea1d2c" />
+          <rect x="35" y="17" width="12" height="12" rx="3" fill="#ea1d2c" />
+          <rect x="17" y="35" width="12" height="12" rx="3" fill="#ea1d2c" />
+          <rect x="35" y="35" width="12" height="12" rx="3" fill="#ea1d2c" />
         </svg>
       );
   }

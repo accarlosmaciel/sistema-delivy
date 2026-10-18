@@ -672,5 +672,82 @@ export const CentralStore = {
     const updated = list.filter(e => e.id !== id);
     this.saveExpenses(updated);
     return updated;
+  },
+
+  // --- AUTENTICAÇÃO DE ADMIN ---
+  // Senhas padrão dos usuários do sistema (em produção, usar hash + backend)
+  _defaultPasswords: {
+    'superadmin@delivy.com.br': 'admin123',
+    'roberto@delivygourmet.com': 'admin123',
+    'cozinha@delivygourmet.com': 'cozinha123'
+  },
+
+  loginAdmin(email, password) {
+    const users = this.getUsers();
+    const user = users.find(u => u.email === email);
+    
+    if (!user) {
+      return { success: false, error: 'Usuário não encontrado.' };
+    }
+    
+    // Só superadmin, admin e kitchen podem logar no painel
+    if (!['superadmin', 'admin', 'kitchen'].includes(user.role)) {
+      return { success: false, error: 'Acesso restrito. Somente administradores podem acessar o painel.' };
+    }
+    
+    if (user.status !== 'ativo') {
+      return { success: false, error: 'Conta desativada. Contate o administrador.' };
+    }
+
+    // Verificar senha
+    const expectedPassword = this._defaultPasswords[email] || 'admin123';
+    if (password !== expectedPassword) {
+      return { success: false, error: 'Senha incorreta.' };
+    }
+
+    // Salvar sessão
+    const session = {
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      avatar: user.avatar,
+      loginAt: new Date().toISOString()
+    };
+    
+    try {
+      localStorage.setItem('delivy_admin_session', JSON.stringify(session));
+      this.setCurrentUser(user);
+      this.broadcast('ADMIN_LOGGED_IN', session);
+    } catch (e) {}
+
+    return { success: true, user: session };
+  },
+
+  logoutAdmin() {
+    try {
+      localStorage.removeItem('delivy_admin_session');
+      this.broadcast('ADMIN_LOGGED_OUT', null);
+    } catch (e) {}
+  },
+
+  isAdminLoggedIn() {
+    if (typeof window === 'undefined') return false;
+    try {
+      const session = localStorage.getItem('delivy_admin_session');
+      return !!session;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  getLoggedAdmin() {
+    if (typeof window === 'undefined') return null;
+    try {
+      const session = localStorage.getItem('delivy_admin_session');
+      return session ? JSON.parse(session) : null;
+    } catch (e) {
+      return null;
+    }
   }
 };

@@ -20,8 +20,14 @@ import Toast from './components/Toast';
 import CategoryIcon from './components/CategoryIcon';
 import { PRODUCTS, CATEGORIES, RESTAURANT_INFO, PROMO_COUPONS } from './data/products';
 import { ArrowRight, Search, Sparkles } from 'lucide-react';
+import SistemaControleApp from './sistema_controle/SistemaControleApp';
+import TelaCozinhaKDS from './sistema_controle/TelaCozinhaKDS';
+import ViewSwitcherBar from './sistema_controle/ViewSwitcherBar';
+import { CentralStore } from './sistema_controle/store';
 
 export default function App() {
+  const [currentView, setCurrentView] = useState('client'); // 'client' | 'kitchen' | 'admin'
+  const [productsList, setProductsList] = useState(PRODUCTS);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('inicio');
@@ -63,10 +69,35 @@ export default function App() {
 
       const savedAddress = localStorage.getItem('delivy_address');
       if (savedAddress) setCurrentAddress(savedAddress);
+
+      // Carregar produtos e estoque atualizados do CentralStore
+      setProductsList(CentralStore.getProducts());
     } catch (e) {
       console.error('Erro ao carregar do localStorage:', e);
     }
     setIsLoaded(true);
+
+    // Escutar eventos da cozinha e do gestor
+    const unsub = CentralStore.subscribe((event) => {
+      if (event.action === 'PRODUCTS_UPDATED') {
+        setProductsList(event.payload);
+      } else if (event.action === 'ACTIVE_ORDER_UPDATED') {
+        setActiveOrder(event.payload);
+      } else if (event.action === 'ORDERS_UPDATED') {
+        try {
+          const savedOrder = localStorage.getItem('delivy_active_order');
+          if (savedOrder) {
+            const current = JSON.parse(savedOrder);
+            const found = event.payload.find(o => o.id === current.id);
+            if (found && found.status !== current.status) {
+              setActiveOrder(found);
+            }
+          }
+        } catch (e) {}
+      }
+    });
+
+    return unsub;
   }, []);
 
   // Persist cart
@@ -185,13 +216,15 @@ export default function App() {
   };
 
   const handleOrderPlaced = (newOrder) => {
-    setActiveOrder(newOrder);
+    // Sincroniza pedido com a Cozinha TV, Dashboard e Clientes
+    const fullSavedOrder = CentralStore.addOrder(newOrder);
+    setActiveOrder(fullSavedOrder);
     setCartItems([]);
     setAppliedCoupon(null);
     setIsCheckoutOpen(false);
     setIsCartOpen(false);
     setIsTrackerOpen(true);
-    showToast(`Pedido #${newOrder.orderId} realizado com sucesso!`);
+    showToast(`Pedido #${fullSavedOrder.id || newOrder.orderId} realizado e enviado para a Cozinha!`);
   };
 
   const showToast = (msg) => {
@@ -236,10 +269,13 @@ export default function App() {
   };
 
   const handleApplyCouponCode = (code) => {
-    const coupon = PROMO_COUPONS[code];
+    const coupons = CentralStore.getCoupons();
+    const coupon = coupons[code.toUpperCase()];
     if (coupon) {
       setAppliedCoupon(coupon);
-      showToast(`Cupom ${code} ativado com sucesso!`);
+      showToast(`Cupom ${code.toUpperCase()} ativado com sucesso!`);
+    } else {
+      showToast('Cupom inválido ou expirado');
     }
   };
 
@@ -263,8 +299,8 @@ export default function App() {
     }
   };
 
-  // Filter products by category and search term
-  const filteredProducts = PRODUCTS.filter((product) => {
+  // Filter products by category and search term using the dynamic store
+  const filteredProducts = productsList.filter((product) => {
     const matchesCategory = 
       activeCategory === 'all' 
         ? true 
@@ -276,10 +312,28 @@ export default function App() {
     const matchesSearch = 
       !query || 
       product.name.toLowerCase().includes(query) || 
-      product.description.toLowerCase().includes(query);
+      (product.description && product.description.toLowerCase().includes(query));
 
     return matchesCategory && matchesSearch;
   });
+
+  if (currentView === 'admin') {
+    return (
+      <>
+        <SistemaControleApp onNavigateToClient={() => setCurrentView('client')} />
+        <ViewSwitcherBar activeView={currentView} onViewChange={setCurrentView} />
+      </>
+    );
+  }
+
+  if (currentView === 'kitchen') {
+    return (
+      <>
+        <TelaCozinhaKDS onNavigateBack={() => setCurrentView('client')} />
+        <ViewSwitcherBar activeView={currentView} onViewChange={setCurrentView} />
+      </>
+    );
+  }
 
   return (
     <div className="delivy-mobile-container">
@@ -484,6 +538,9 @@ export default function App() {
 
       {/* Toast Notification */}
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
+
+      {/* Floating View Switcher Bar */}
+      <ViewSwitcherBar activeView={currentView} onViewChange={setCurrentView} />
     </div>
   );
 }

@@ -450,17 +450,23 @@ button, input, select, textarea {
 
 .product-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 6px;
+  left: 6px;
   background: linear-gradient(135deg, var(--primary) 0%, #d64200 100%);
   color: #fff;
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
+  letter-spacing: 0.03em;
+  padding: 2px 7px;
+  border-radius: 4px;
   box-shadow: var(--shadow-sm);
+  max-width: 85%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .product-content {
@@ -2934,6 +2940,30 @@ button, input, select, textarea {
   min-width: 88px;
   height: 88px;
   border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.delivy-mobile-container .product-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: #ea1d2c;
+  color: #ffffff;
+  font-size: 0.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.15;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .delivy-mobile-container .product-content {
@@ -3004,14 +3034,33 @@ button, input, select, textarea {
   background: #f4f4f5;
   border: 1px solid transparent;
   color: #717171;
-  padding: 8px 14px;
-  font-size: 0.82rem;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .delivy-mobile-container .category-btn.active {
   background: #ea1d2c;
   color: #ffffff;
   border-color: #ea1d2c;
+}
+
+.delivy-mobile-container .section-title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1f1f1f;
+}
+
+.delivy-mobile-container .section-title svg {
+  width: 15px;
+  height: 15px;
 }
 
 .cart-badge-counter {

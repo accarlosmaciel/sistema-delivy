@@ -16,7 +16,7 @@ export default function CategoryNav({ activeCategory, onSelectCategory, searchTe
               className={`category-btn ${activeCategory === cat.id ? 'active' : ''}`}
               onClick={() => onSelectCategory(cat.id)}
             >
-              <CategoryIcon name={cat.icon} size={18} />
+              <CategoryIcon name={cat.icon} size={13} />
               <span>{cat.name}</span>
             </button>
           ))}

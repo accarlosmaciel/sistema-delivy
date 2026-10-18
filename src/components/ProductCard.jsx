@@ -40,7 +40,7 @@ export default function ProductCard({ product, cartQty, onAddToCart, onRemoveFro
                   onClick={() => onRemoveFromCart(product.id)}
                   aria-label="Diminuir quantidade"
                 >
-                  <Minus size={14} />
+                  <Minus size={11} />
                 </button>
                 <span className="qty-count">{cartQty}</span>
                 <button 
@@ -48,7 +48,7 @@ export default function ProductCard({ product, cartQty, onAddToCart, onRemoveFro
                   onClick={() => onAddToCart(product)}
                   aria-label="Aumentar quantidade"
                 >
-                  <Plus size={14} />
+                  <Plus size={11} />
                 </button>
               </div>
             ) : (
@@ -56,7 +56,7 @@ export default function ProductCard({ product, cartQty, onAddToCart, onRemoveFro
                 className="add-btn" 
                 onClick={() => onAddToCart(product)}
               >
-                <Plus size={16} />
+                <Plus size={13} />
                 <span>Adicionar</span>
               </button>
             )}

@@ -397,7 +397,7 @@ export default function App() {
           <h2 className="section-title">
             <CategoryIcon 
               name={CATEGORIES.find((c) => c.id === activeCategory)?.icon || 'Sparkles'} 
-              size={20} 
+              size={15} 
               style={{ color: '#ea1d2c' }} 
             />
             <span>{CATEGORIES.find((c) => c.id === activeCategory)?.name || 'Destaques'}</span>

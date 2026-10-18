@@ -30,7 +30,7 @@ const ICONS = {
   combos: Tag
 };
 
-export default function CategoryIcon({ name, size = 18, className = '', style = {} }) {
+export default function CategoryIcon({ name, size = 14, className = '', style = {} }) {
   const IconComponent = ICONS[name] || Sparkles;
   return <IconComponent size={size} className={className} style={style} />;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
-import { X, User, Heart, CreditCard, MapPin, Gift, Settings, ShieldCheck, LogOut } from 'lucide-react';
+import { X, User, Heart, CreditCard, MapPin, Gift, Settings, ShieldCheck, LogOut, Lock } from 'lucide-react';
 
-export default function ProfileDrawer({ isOpen, onClose, userName = "Carlos", currentAddress = "R. RSP 24, 35", onOpenAddress, onOpenClub }) {
+export default function ProfileDrawer({ isOpen, onClose, userName = "Carlos", currentAddress = "R. RSP 24, 35", onOpenAddress, onOpenClub, onOpenAdminLogin }) {
   if (!isOpen) return null;
 
   return (
@@ -65,6 +65,27 @@ export default function ProfileDrawer({ isOpen, onClose, userName = "Carlos", cu
             <div className="menu-text">
               <strong>Segurança e Privacidade</strong>
               <span>Dados protegidos</span>
+            </div>
+          </div>
+
+          {/* Acesso exclusivo do Gestor / Restaurante */}
+          <div 
+            className="profile-menu-item" 
+            style={{ 
+              marginTop: '12px', 
+              background: 'linear-gradient(135deg, rgba(234, 88, 12, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%)',
+              border: '1px solid rgba(234, 88, 12, 0.25)',
+              borderRadius: '12px'
+            }} 
+            onClick={() => { 
+              if (onOpenAdminLogin) onOpenAdminLogin(); 
+              onClose(); 
+            }}
+          >
+            <Lock size={20} color="#ea580c" />
+            <div className="menu-text">
+              <strong style={{ color: '#ea580c' }}>Área do Dono / Gestão</strong>
+              <span>Acesso restrito com senha</span>
             </div>
           </div>
         </div>

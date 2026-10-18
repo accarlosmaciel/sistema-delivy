@@ -23,10 +23,14 @@ import { ArrowRight, Search, Sparkles } from 'lucide-react';
 import SistemaControleApp from './sistema_controle/SistemaControleApp';
 import TelaCozinhaKDS from './sistema_controle/TelaCozinhaKDS';
 import ViewSwitcherBar from './sistema_controle/ViewSwitcherBar';
+import AdminLoginModal from './sistema_controle/AdminLoginModal';
 import { CentralStore } from './sistema_controle/store';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('client'); // 'client' | 'kitchen' | 'admin'
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
   const [productsList, setProductsList] = useState(PRODUCTS);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -72,17 +76,30 @@ export default function App() {
 
       // Carregar produtos e estoque atualizados do CentralStore
       setProductsList(CentralStore.getProducts());
+
+      // Verificar se há administrador autenticado
+      if (CentralStore.isAdminLoggedIn()) {
+        setIsAdmin(true);
+        setAdminUser(CentralStore.getLoggedAdmin());
+      }
     } catch (e) {
       console.error('Erro ao carregar do localStorage:', e);
     }
     setIsLoaded(true);
 
-    // Escutar eventos da cozinha e do gestor
+    // Escutar eventos da cozinha, gestor e autenticação
     const unsub = CentralStore.subscribe((event) => {
       if (event.action === 'PRODUCTS_UPDATED') {
         setProductsList(event.payload);
       } else if (event.action === 'ACTIVE_ORDER_UPDATED') {
         setActiveOrder(event.payload);
+      } else if (event.action === 'ADMIN_LOGGED_IN') {
+        setIsAdmin(true);
+        setAdminUser(event.payload);
+      } else if (event.action === 'ADMIN_LOGGED_OUT') {
+        setIsAdmin(false);
+        setAdminUser(null);
+        setCurrentView('client');
       } else if (event.action === 'ORDERS_UPDATED') {
         try {
           const savedOrder = localStorage.getItem('delivy_active_order');
@@ -316,20 +333,72 @@ export default function App() {
     return matchesCategory && matchesSearch;
   });
 
+  const handleViewChange = (targetView) => {
+    if ((targetView === 'admin' || targetView === 'kitchen') && !isAdmin) {
+      setIsAdminLoginOpen(true);
+      return;
+    }
+    setCurrentView(targetView);
+  };
+
+  const handleAdminLoginSuccess = (user) => {
+    setIsAdmin(true);
+    setAdminUser(user);
+    setIsAdminLoginOpen(false);
+    showToast(`Bem-vindo, ${user.name}! Modo Gestão ativado.`);
+    if (user.role === 'kitchen') {
+      setCurrentView('kitchen');
+    } else {
+      setCurrentView('admin');
+    }
+  };
+
+  const handleAdminLogout = () => {
+    CentralStore.logoutAdmin();
+    setIsAdmin(false);
+    setAdminUser(null);
+    setCurrentView('client');
+    showToast('Você saiu do modo administrador.');
+  };
+
   if (currentView === 'admin') {
+    if (!isAdmin) {
+      setCurrentView('client');
+      setIsAdminLoginOpen(true);
+      return null;
+    }
     return (
       <>
         <SistemaControleApp onNavigateToClient={() => setCurrentView('client')} />
-        <ViewSwitcherBar activeView={currentView} onViewChange={setCurrentView} />
+        <ViewSwitcherBar 
+          activeView={currentView} 
+          onViewChange={handleViewChange} 
+          isAdmin={isAdmin}
+          adminUser={adminUser}
+          onOpenLogin={() => setIsAdminLoginOpen(true)}
+          onLogout={handleAdminLogout}
+        />
       </>
     );
   }
 
   if (currentView === 'kitchen') {
+    if (!isAdmin) {
+      setCurrentView('client');
+      setIsAdminLoginOpen(true);
+      return null;
+    }
     return (
       <>
         <TelaCozinhaKDS onNavigateBack={() => setCurrentView('client')} />
-        <ViewSwitcherBar activeView={currentView} onViewChange={setCurrentView} />
+        <ViewSwitcherBar 
+          activeView={currentView} 
+          onViewChange={handleViewChange} 
+          isAdmin={isAdmin}
+          adminUser={adminUser}
+          onOpenLogin={() => setIsAdminLoginOpen(true)}
+          onLogout={handleAdminLogout}
+        />
       </>
     );
   }
@@ -485,6 +554,14 @@ export default function App() {
         currentAddress={currentAddress}
         onOpenAddress={() => setIsAddressOpen(true)}
         onOpenClub={() => setIsClubOpen(true)}
+        onOpenAdminLogin={() => setIsAdminLoginOpen(true)}
+      />
+
+      {/* Admin Login Modal (Acesso Restrito) */}
+      <AdminLoginModal
+        isOpen={isAdminLoginOpen}
+        onClose={() => setIsAdminLoginOpen(false)}
+        onLoginSuccess={handleAdminLoginSuccess}
       />
 
       {/* Product Customization Modal */}
@@ -538,8 +615,15 @@ export default function App() {
       {/* Toast Notification */}
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
 
-      {/* Floating View Switcher Bar */}
-      <ViewSwitcherBar activeView={currentView} onViewChange={setCurrentView} />
+      {/* Floating View Switcher Bar (Protegida por Autenticação) */}
+      <ViewSwitcherBar 
+        activeView={currentView} 
+        onViewChange={handleViewChange} 
+        isAdmin={isAdmin}
+        adminUser={adminUser}
+        onOpenLogin={() => setIsAdminLoginOpen(true)}
+        onLogout={handleAdminLogout}
+      />
     </div>
   );
 }

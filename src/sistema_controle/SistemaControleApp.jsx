@@ -198,12 +198,30 @@ export default function SistemaControleApp({ initialTab = 'dashboard', onNavigat
             <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {currentUser?.name || 'Carlos Maciel'}
             </div>
-            <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-              {currentUser?.role === 'superadmin' ? '🛡️ Superadmin' : '🏪 Dono da Loja'}
+            <div style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              {currentUser?.role === 'superadmin' ? (
+                <>
+                  <ShieldCheck size={13} color="#c4b5fd" />
+                  <span>Superadmin</span>
+                </>
+              ) : (
+                <>
+                  <Store size={13} color="#fdba74" />
+                  <span>Dono da Loja</span>
+                </>
+              )}
             </div>
           </div>
         </div>
       </aside>
+
+      {/* Backdrop overlay para fechar o menu no celular ao clicar fora */}
+      {isMobileMenuOpen && (
+        <div 
+          className="admin-sidebar-backdrop" 
+          onClick={() => setIsMobileMenuOpen(false)} 
+        />
+      )}
 
       {/* Área Principal de Conteúdo */}
       <main className="admin-main">
@@ -211,9 +229,9 @@ export default function SistemaControleApp({ initialTab = 'dashboard', onNavigat
         <header className="admin-topbar">
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <button 
-              className="btn-outline-adm"
+              className="btn-outline-adm admin-mobile-menu-btn"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              style={{ display: 'md-none', padding: '6px' }}
+              title="Abrir Menu de Navegação"
             >
               <Menu size={20} />
             </button>

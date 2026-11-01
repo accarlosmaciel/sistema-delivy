@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Users, 
+  User,
   ShieldCheck, 
   Store, 
   UserPlus, 
@@ -14,7 +15,8 @@ import {
   Star,
   Check,
   X,
-  MessageCircle
+  MessageCircle,
+  ChefHat
 } from 'lucide-react';
 import { CentralStore } from './store';
 
@@ -223,28 +225,85 @@ export default function UsuariosManager({ currentUser, onSwitchUser, onNotify })
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '8px' }}>
-            {['all', 'superadmin', 'admin', 'cliente'].map(role => (
-              <button
-                key={role}
-                onClick={() => setRoleFilter(role)}
-                style={{
-                  background: roleFilter === role ? '#ea580c' : '#1e293b',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '8px 14px',
-                  borderRadius: '8px',
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  cursor: 'pointer'
-                }}
-              >
-                {role === 'all' && 'Todos'}
-                {role === 'superadmin' && '🛡️ Superadmin'}
-                {role === 'admin' && '🏪 Donos (Admin)'}
-                {role === 'cliente' && '👤 Clientes'}
-              </button>
-            ))}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => setRoleFilter('all')}
+              style={{
+                background: roleFilter === 'all' ? '#ea580c' : '#1e293b',
+                color: '#fff',
+                border: 'none',
+                padding: '8px 14px',
+                borderRadius: '8px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span>Todos</span>
+            </button>
+
+            <button
+              onClick={() => setRoleFilter('superadmin')}
+              style={{
+                background: roleFilter === 'superadmin' ? '#8b5cf6' : '#1e293b',
+                color: '#fff',
+                border: 'none',
+                padding: '8px 14px',
+                borderRadius: '8px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <ShieldCheck size={15} color="#c4b5fd" />
+              <span>Superadmin</span>
+            </button>
+
+            <button
+              onClick={() => setRoleFilter('admin')}
+              style={{
+                background: roleFilter === 'admin' ? '#ea580c' : '#1e293b',
+                color: '#fff',
+                border: 'none',
+                padding: '8px 14px',
+                borderRadius: '8px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <Store size={15} color="#fdba74" />
+              <span>Donos (Admin)</span>
+            </button>
+
+            <button
+              onClick={() => setRoleFilter('cliente')}
+              style={{
+                background: roleFilter === 'cliente' ? '#10b981' : '#1e293b',
+                color: '#fff',
+                border: 'none',
+                padding: '8px 14px',
+                borderRadius: '8px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <User size={15} color="#34d399" />
+              <span>Clientes</span>
+            </button>
           </div>
         </div>
       </div>
@@ -313,13 +372,15 @@ export default function UsuariosManager({ currentUser, onSwitchUser, onNotify })
                       {/* Papel */}
                       <td>
                         {user.role === 'superadmin' && (
-                          <span className="admin-role-pill role-superadmin">
-                            🛡️ Superadmin
+                          <span className="admin-role-pill role-superadmin" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <ShieldCheck size={13} />
+                            <span>Superadmin</span>
                           </span>
                         )}
                         {user.role === 'admin' && (
-                          <span className="admin-role-pill role-admin">
-                            🏪 Dono da Loja
+                          <span className="admin-role-pill role-admin" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <Store size={13} />
+                            <span>Dono da Loja</span>
                           </span>
                         )}
                         {user.role === 'cliente' && (
@@ -329,14 +390,19 @@ export default function UsuariosManager({ currentUser, onSwitchUser, onNotify })
                             padding: '4px 8px', 
                             borderRadius: '6px', 
                             fontSize: '0.78rem',
-                            fontWeight: 700 
+                            fontWeight: 700,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '5px'
                           }}>
-                            👤 {user.tag || 'Cliente'}
+                            <User size={13} />
+                            <span>{user.tag || 'Cliente'}</span>
                           </span>
                         )}
                         {user.role === 'kitchen' && (
-                          <span className="admin-role-pill role-kitchen">
-                            🧑‍🍳 Cozinha
+                          <span className="admin-role-pill role-kitchen" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                            <ChefHat size={13} />
+                            <span>Cozinha</span>
                           </span>
                         )}
                       </td>
@@ -468,10 +534,15 @@ export default function UsuariosManager({ currentUser, onSwitchUser, onNotify })
                       background: formData.role === 'cliente' ? 'rgba(16, 185, 129, 0.15)' : '#0b0f19',
                       color: formData.role === 'cliente' ? '#34d399' : '#cbd5e1',
                       fontWeight: 700,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px'
                     }}
                   >
-                    👤 Cliente
+                    <User size={18} />
+                    <span>Cliente</span>
                   </button>
 
                   <button
@@ -484,10 +555,15 @@ export default function UsuariosManager({ currentUser, onSwitchUser, onNotify })
                       background: formData.role === 'admin' ? 'rgba(234, 88, 12, 0.15)' : '#0b0f19',
                       color: formData.role === 'admin' ? '#fb923c' : '#cbd5e1',
                       fontWeight: 700,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px'
                     }}
                   >
-                    🏪 Dono da Loja
+                    <Store size={18} />
+                    <span>Dono da Loja</span>
                   </button>
 
                   <button
@@ -500,10 +576,15 @@ export default function UsuariosManager({ currentUser, onSwitchUser, onNotify })
                       background: formData.role === 'superadmin' ? 'rgba(139, 92, 246, 0.15)' : '#0b0f19',
                       color: formData.role === 'superadmin' ? '#c4b5fd' : '#cbd5e1',
                       fontWeight: 700,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px'
                     }}
                   >
-                    🛡️ Superadmin
+                    <ShieldCheck size={18} />
+                    <span>Superadmin</span>
                   </button>
                 </div>
               </div>

@@ -11,7 +11,8 @@ import {
   Flame, 
   ExternalLink,
   Calendar,
-  CheckCircle2
+  CheckCircle2,
+  Trophy
 } from 'lucide-react';
 import { CentralStore } from './store';
 
@@ -249,9 +250,24 @@ export default function Dashboard({ onNavigateTab }) {
                   </div>
 
                   <span className={`badge-status status-${ord.status}`}>
-                    {ord.status === 'received' && '🟡 Novo'}
-                    {ord.status === 'preparing' && '🟠 No Fogo'}
-                    {ord.status === 'ready' && '🟢 Pronto'}
+                    {ord.status === 'received' && (
+                      <>
+                        <Clock size={12} />
+                        <span>Novo</span>
+                      </>
+                    )}
+                    {ord.status === 'preparing' && (
+                      <>
+                        <Flame size={12} />
+                        <span>No Fogo</span>
+                      </>
+                    )}
+                    {ord.status === 'ready' && (
+                      <>
+                        <CheckCircle2 size={12} />
+                        <span>Pronto</span>
+                      </>
+                    )}
                   </span>
                 </div>
               ))
@@ -264,8 +280,9 @@ export default function Dashboard({ onNavigateTab }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px' }}>
         {/* Produtos Top Sellers */}
         <div className="admin-card">
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', marginBottom: '16px' }}>
-            🏆 Mais Vendidos do Cardápio
+          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Trophy size={20} color="#f59e0b" />
+            <span>Mais Vendidos do Cardápio</span>
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {topSelling.length > 0 ? (

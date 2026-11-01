@@ -4,12 +4,15 @@ export const metadata = {
   title: 'Delivy Gourmet & Crafts',
   description: 'Peça os melhores lanches artesanais, pratos executivos e bebidas especiais. Entrega rápida e segura.',
   manifest: '/manifest.json',
-  themeColor: '#ea580c',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
     title: 'Delivy'
   }
+};
+
+export const viewport = {
+  themeColor: '#ea580c',
 };
 
 export default function RootLayout({ children }) {

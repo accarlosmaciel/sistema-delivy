@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, User, Heart, CreditCard, MapPin, Gift, Settings, ShieldCheck, LogOut, Lock } from 'lucide-react';
+import { X, User, Heart, CreditCard, MapPin, Gift, Settings, ShieldCheck, LogOut, Lock, Gem } from 'lucide-react';
 
 export default function ProfileDrawer({ isOpen, onClose, userName = "Carlos", currentAddress = "R. RSP 24, 35", onOpenAddress, onOpenClub, onOpenAdminLogin }) {
   if (!isOpen) return null;
@@ -21,8 +21,9 @@ export default function ProfileDrawer({ isOpen, onClose, userName = "Carlos", cu
           <div className="profile-user-info">
             <h4>{userName}</h4>
             <p>carlos@delivy.com.br</p>
-            <span className="profile-tier-badge" onClick={() => { onOpenClub && onOpenClub(); onClose(); }}>
-              💎 Membro VIP Delivy
+            <span className="profile-tier-badge" onClick={() => { onOpenClub && onOpenClub(); onClose(); }} style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+              <Gem size={13} color="#38bdf8" />
+              <span>Membro VIP Delivy</span>
             </span>
           </div>
         </div>

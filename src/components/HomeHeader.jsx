@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, Bell, Gem, ShoppingBag } from 'lucide-react';
+import { ChevronDown, Bell, Gem, ShoppingBag, ShieldCheck } from 'lucide-react';
 
 export default function HomeHeader({ 
   currentAddress = "R. RSP 24, 35", 
@@ -10,7 +10,8 @@ export default function HomeHeader({
   onOpenNotifications,
   cartCount = 0,
   cartTotal = 0,
-  onOpenCart
+  onOpenCart,
+  onOpenAdminLogin
 }) {
   return (
     <header className="home-top-bar">
@@ -55,6 +56,19 @@ export default function HomeHeader({
           >
             <ShoppingBag size={18} />
             <span className="cart-pill-badge">{cartCount}</span>
+          </button>
+        )}
+
+        {/* Atalho direto para Gestão/ADM no PC e Mobile */}
+        {onOpenAdminLogin && (
+          <button 
+            className="header-adm-btn"
+            onClick={onOpenAdminLogin}
+            title="Acesso Gestão / Painel ADM"
+            aria-label="Acesso Gestão / Painel ADM"
+          >
+            <ShieldCheck size={16} />
+            <span className="header-adm-text">ADM</span>
           </button>
         )}
       </div>

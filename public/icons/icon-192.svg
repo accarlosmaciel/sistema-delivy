@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="delivyGrad192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <filter id="shadow192" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+  <rect width="192" height="192" rx="42" fill="url(#delivyGrad192)" />
+  <g filter="url(#shadow192)" transform="translate(36, 36)">
+    <!-- Delivery bag / flame shape -->
+    <path d="M60 12 C35 12, 16 32, 16 58 C16 84, 38 102, 60 114 C82 102, 104 84, 104 58 C104 32, 85 12, 60 12 Z" fill="#ffffff" opacity="0.95" />
+    <!-- Fork / flame accent inside -->
+    <path d="M60 30 C52 44, 46 54, 46 64 C46 72, 52 78, 60 78 C68 78, 74 72, 74 64 C74 54, 68 44, 60 30 Z" fill="#ea580c" />
+    <circle cx="60" cy="56" r="6" fill="#ffffff" />
+  </g>
+</svg>

@@ -12,7 +12,8 @@ import {
   Layers, 
   Sparkles,
   ArrowUpDown,
-  Filter
+  Filter,
+  AlertTriangle
 } from 'lucide-react';
 import { CentralStore } from './store';
 import { CATEGORIES } from '../data/products';
@@ -227,8 +228,8 @@ export default function ProdutosManager({ onNotify }) {
             style={{ width: 'auto', minWidth: '160px' }}
           >
             <option value="all">Todos os Estoques</option>
-            <option value="low">⚠️ Estoque Baixo (&lt; 10)</option>
-            <option value="out">❌ Esgotados / Pausados</option>
+            <option value="low">Estoque Baixo (&lt; 10)</option>
+            <option value="out">Esgotados / Pausados</option>
           </select>
 
           <span style={{ fontSize: '0.85rem', color: '#94a3b8', marginLeft: 'auto' }}>
@@ -343,8 +344,9 @@ export default function ProdutosManager({ onNotify }) {
                           </button>
                         </div>
                         {isLowStock && (
-                          <span style={{ fontSize: '0.72rem', color: '#f59e0b', display: 'block', marginTop: '4px' }}>
-                            ⚠️ Baixo estoque
+                          <span style={{ fontSize: '0.72rem', color: '#f59e0b', display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
+                            <AlertTriangle size={12} />
+                            <span>Baixo estoque</span>
                           </span>
                         )}
                       </td>

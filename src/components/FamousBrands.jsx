@@ -1,4 +1,5 @@
 import React from 'react';
+import { Heart, Star } from 'lucide-react';
 import { FAMOUS_BRANDS } from '../data/products';
 
 function BrandLogo({ brand }) {
@@ -7,9 +8,13 @@ function BrandLogo({ brand }) {
       return (
         <div className="brand-circle brand-acai">
           <div className="brand-inner-ring">
-            <span className="brand-heart">I ♥</span>
+            <span className="brand-heart" style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+              I <Heart size={9} fill="currentColor" />
+            </span>
             <span className="brand-text-sm">AÇAÍ</span>
-            <span className="brand-star">★</span>
+            <span className="brand-star" style={{ display: 'inline-flex' }}>
+              <Star size={9} fill="currentColor" />
+            </span>
           </div>
         </div>
       );
@@ -23,8 +28,12 @@ function BrandLogo({ brand }) {
       return (
         <div className="brand-circle brand-salgados">
           <div className="salgados-flame">
-            <span className="salgados-heart">♥</span>
-            <span className="salgados-star">★</span>
+            <span className="salgados-heart" style={{ display: 'inline-flex' }}>
+              <Heart size={10} fill="currentColor" />
+            </span>
+            <span className="salgados-star" style={{ display: 'inline-flex' }}>
+              <Star size={10} fill="currentColor" />
+            </span>
           </div>
         </div>
       );

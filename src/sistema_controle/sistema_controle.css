@@ -50,6 +50,9 @@
   flex-shrink: 0;
   transition: all 0.25s ease;
   z-index: 40;
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
 .admin-sidebar-header {
@@ -795,24 +798,241 @@
   gap: 14px;
 }
 
+/* ==========================================================================
+   RESPONSIVIDADE PREMIUM - DESKTOP (PC) & CELULAR (MOBILE)
+   ========================================================================== */
+
+/* Regras para Desktop (PC) */
+@media (min-width: 769px) {
+  .admin-mobile-menu-btn {
+    display: none !important;
+  }
+  .admin-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    transform: none !important;
+  }
+  .admin-sidebar-backdrop {
+    display: none !important;
+  }
+}
+
+/* Regras para Celular / Dispositivos Móveis (Mobile) */
 @media (max-width: 768px) {
   .admin-shell {
     flex-direction: column;
-  }
-  .admin-sidebar {
+    min-height: 100vh;
     width: 100%;
+    position: relative;
   }
+
+  /* Sidebar Drawer no Celular */
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 86vw;
+    height: 100vh;
+    z-index: 10000;
+    transform: translateX(-100%);
+    box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .admin-sidebar.open {
+    transform: translateX(0);
+    box-shadow: 12px 0 45px rgba(0, 0, 0, 0.85);
+  }
+
+  .admin-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.75);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 9999;
+    animation: fadeInBackdrop 0.2s ease-out;
+  }
+
+  @keyframes fadeInBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .admin-mobile-menu-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  /* Topbar no Celular */
   .admin-topbar {
-    padding: 0 16px;
+    height: 62px;
+    padding: 0 14px;
+    gap: 10px;
   }
+
+  .admin-topbar-title {
+    font-size: 0.96rem;
+    max-width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-topbar-actions {
+    gap: 6px;
+  }
+
+  .admin-topbar-actions button {
+    padding: 6px 10px !important;
+    font-size: 0.78rem !important;
+  }
+
+  /* Conteúdo com folga inferior para a barra de visões */
   .admin-content {
-    padding: 16px;
+    padding: 14px 12px 105px 12px;
   }
+
+  /* Grid de métricas em coluna única no celular */
+  .admin-grid-4 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .admin-stat-card {
+    padding: 14px 16px;
+  }
+
+  .admin-stat-value {
+    font-size: 1.45rem;
+  }
+
+  .admin-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
   .admin-form-grid-2 {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
+
+  /* Tabelas Responsivas no Celular com Scroll Suave */
+  .admin-table-container {
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  /* Modal de Cadastro no Celular */
+  .admin-modal-card {
+    max-width: 95vw;
+    margin: 8px;
+    max-height: 92vh;
+    border-radius: 14px;
+  }
+
+  .admin-modal-header {
+    padding: 16px;
+  }
+
+  .admin-modal-body {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  /* Cozinha KDS no Celular */
+  .kds-tv-shell {
+    padding: 10px;
+    padding-bottom: 100px;
+  }
+
+  .kds-tv-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .kds-tv-header > div {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .kds-tv-title {
+    font-size: 1.1rem;
+    justify-content: space-between;
+  }
+
+  .kds-clock {
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 4px;
+  }
+
   .kds-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .kds-order-card {
+    border-radius: 12px;
+  }
+
+  .kds-btn {
+    padding: 12px 10px;
+    font-size: 0.95rem;
+    min-height: 48px;
+  }
+
+  /* Barra Flutuante de Troca de Visões no Celular */
+  .view-switcher-pill {
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    width: calc(100% - 20px);
+    max-width: 440px;
+    padding: 5px 6px;
+    gap: 4px;
+    justify-content: space-around;
+  }
+
+  .view-switcher-pill:hover {
+    transform: translateX(-50%) translateY(-1px);
+  }
+
+  .view-switcher-btn {
+    padding: 6px 9px;
+    font-size: 0.78rem;
+    gap: 5px;
+  }
+
+  .view-switcher-admin-badge {
+    padding: 3px 6px;
+    font-size: 0.72rem;
+  }
+
+  .view-switcher-logout-btn {
+    padding: 6px 8px;
+    font-size: 0.74rem;
   }
 }
 

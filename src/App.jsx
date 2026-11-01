@@ -25,6 +25,7 @@ import TelaCozinhaKDS from './sistema_controle/TelaCozinhaKDS';
 import ViewSwitcherBar from './sistema_controle/ViewSwitcherBar';
 import AdminLoginModal from './sistema_controle/AdminLoginModal';
 import { CentralStore } from './sistema_controle/store';
+import PwaInstallPrompt from './components/PwaInstallPrompt';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('client'); // 'client' | 'kitchen' | 'admin'
@@ -378,6 +379,7 @@ export default function App() {
           onOpenLogin={() => setIsAdminLoginOpen(true)}
           onLogout={handleAdminLogout}
         />
+        <PwaInstallPrompt />
       </>
     );
   }
@@ -399,6 +401,7 @@ export default function App() {
           onOpenLogin={() => setIsAdminLoginOpen(true)}
           onLogout={handleAdminLogout}
         />
+        <PwaInstallPrompt />
       </>
     );
   }
@@ -419,6 +422,13 @@ export default function App() {
         cartCount={cartCount}
         cartTotal={finalTotal}
         onOpenCart={() => setIsCartOpen(true)}
+        onOpenAdminLogin={() => {
+          if (isAdmin) {
+            setCurrentView('admin');
+          } else {
+            setIsAdminLoginOpen(true);
+          }
+        }}
       />
 
       {/* 2. Quick Categories (Restaurantes, Mercados, Bebidas, etc.) */}
@@ -624,6 +634,9 @@ export default function App() {
         onOpenLogin={() => setIsAdminLoginOpen(true)}
         onLogout={handleAdminLogout}
       />
+
+      {/* PWA Install Prompt (Detecta exclusivamente celulares com controle de frequência) */}
+      <PwaInstallPrompt />
     </div>
   );
 }

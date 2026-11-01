@@ -107,7 +107,10 @@ export default function RestaurantInfo({ cartSubtotal = 0, onApplyCoupon }) {
               </div>
               <span className="tracker-label">
                 {progressPercent >= 100 ? (
-                  <strong className="success-text">Parabéns! Você desbloqueou FRETE GRÁTIS! 🎉</strong>
+                  <strong className="success-text" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                    <span>Parabéns! Você desbloqueou FRETE GRÁTIS!</span>
+                    <Sparkles size={15} color="#10b981" />
+                  </strong>
                 ) : (
                   <span>
                     Faltam <strong>R$ {remainingForFreeDelivery.toFixed(2).replace('.', ',')}</strong> para <strong>Frete Grátis</strong>
@@ -186,7 +189,10 @@ export default function RestaurantInfo({ cartSubtotal = 0, onApplyCoupon }) {
                 <Star size={18} color="#f59e0b" />
                 <div>
                   <strong>Avaliações dos Clientes</strong>
-                  <p>⭐ {RESTAURANT_INFO.rating} de 5.0 baseado em mais de {RESTAURANT_INFO.reviewsCount} pedidos entregues.</p>
+                  <p style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <Star size={14} fill="#f59e0b" color="#f59e0b" />
+                    <span>{RESTAURANT_INFO.rating} de 5.0 baseado em mais de {RESTAURANT_INFO.reviewsCount} pedidos entregues.</span>
+                  </p>
                 </div>
               </div>
             </div>

@@ -404,9 +404,22 @@ export default function TelaCozinhaKDS({ onNavigateBack }) {
                     borderRadius: '6px',
                     fontWeight: 700,
                     background: order.deliveryType === 'pickup' ? 'rgba(168, 85, 247, 0.2)' : 'rgba(59, 130, 246, 0.2)',
-                    color: order.deliveryType === 'pickup' ? '#c084fc' : '#60a5fa'
+                    color: order.deliveryType === 'pickup' ? '#c084fc' : '#60a5fa',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px'
                   }}>
-                    {order.deliveryType === 'pickup' ? '🛍️ RETIRADA' : '🛵 ENTREGA'}
+                    {order.deliveryType === 'pickup' ? (
+                      <>
+                        <ShoppingBag size={13} />
+                        <span>RETIRADA</span>
+                      </>
+                    ) : (
+                      <>
+                        <Bike size={13} />
+                        <span>ENTREGA</span>
+                      </>
+                    )}
                   </span>
                 </div>
 
@@ -434,8 +447,9 @@ export default function TelaCozinhaKDS({ onNavigateBack }) {
 
                           {/* Observações da Cozinha com Destaque Máximo */}
                           {item.notes && (
-                            <div className="kds-item-notes">
-                              ⚠️ {item.notes}
+                            <div className="kds-item-notes" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <AlertTriangle size={14} color="#facc15" />
+                              <span>{item.notes}</span>
                             </div>
                           )}
                         </div>
@@ -454,7 +468,7 @@ export default function TelaCozinhaKDS({ onNavigateBack }) {
                         onClick={() => handleUpdateStatus(order.id, 'preparing')}
                       >
                         <Flame size={20} />
-                        Começar Preparo 🔥
+                        Começar Preparo
                       </button>
                     </>
                   )}
@@ -467,7 +481,7 @@ export default function TelaCozinhaKDS({ onNavigateBack }) {
                         onClick={() => handleUpdateStatus(order.id, 'ready')}
                       >
                         <CheckCircle size={20} />
-                        Marcar Pronto 🟢
+                        Marcar Pronto
                       </button>
                     </>
                   )}

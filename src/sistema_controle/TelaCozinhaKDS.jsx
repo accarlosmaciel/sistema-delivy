@@ -13,7 +13,8 @@ import {
   Printer, 
   RefreshCw,
   BellRing,
-  Filter
+  Filter,
+  ShoppingBag
 } from 'lucide-react';
 import { CentralStore } from './store';
 import { kitchenAudio } from './audioNotification';
@@ -199,10 +200,14 @@ export default function TelaCozinhaKDS({ onNavigateBack }) {
                 borderRadius: '8px',
                 fontSize: '0.85rem',
                 fontWeight: 700,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
               }}
             >
-              🟡 Novos ({countReceived})
+              <Clock size={14} />
+              <span>Novos ({countReceived})</span>
             </button>
 
             <button 
@@ -215,10 +220,14 @@ export default function TelaCozinhaKDS({ onNavigateBack }) {
                 borderRadius: '8px',
                 fontSize: '0.85rem',
                 fontWeight: 700,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
               }}
             >
-              🔥 No Fogo ({countPreparing})
+              <Flame size={14} />
+              <span>No Fogo ({countPreparing})</span>
             </button>
 
             <button 
@@ -231,10 +240,14 @@ export default function TelaCozinhaKDS({ onNavigateBack }) {
                 borderRadius: '8px',
                 fontSize: '0.85rem',
                 fontWeight: 700,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
               }}
             >
-              🟢 Prontos ({countReady})
+              <CheckCircle size={14} />
+              <span>Prontos ({countReady})</span>
             </button>
           </div>
         </div>

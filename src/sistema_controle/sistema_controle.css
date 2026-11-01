@@ -1307,3 +1307,288 @@
   transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   RESPONSIVIDADE MOBILE — ADMIN / COZINHA / SUPER ADMIN
+   Breakpoint principal: 768px (celular)
+   ========================================================================== */
+
+/* Botão hambúrguer de menu mobile — oculto no desktop */
+.admin-mobile-menu-btn {
+  display: none;
+}
+
+/* Backdrop escuro para fechar sidebar no mobile */
+.admin-sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* ---- SHELL GERAL ---- */
+  .admin-shell {
+    flex-direction: column;
+    position: relative;
+    min-height: 100dvh;
+  }
+
+  /* ---- SIDEBAR OFF-CANVAS ---- */
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 270px;
+    height: 100%;
+    height: 100dvh;
+    z-index: 1000;
+    transition: left 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: none;
+    overflow-y: auto;
+  }
+
+  .admin-sidebar.open {
+    left: 0;
+    box-shadow: 6px 0 40px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ---- BACKDROP para fechar sidebar ---- */
+  .admin-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+    animation: fadeInBackdrop 0.2s ease;
+  }
+
+  @keyframes fadeInBackdrop {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ---- ÁREA PRINCIPAL ---- */
+  .admin-main {
+    flex: 1;
+    min-height: 100dvh;
+    width: 100%;
+  }
+
+  /* ---- TOPBAR MOBILE ---- */
+  .admin-topbar {
+    height: auto;
+    min-height: 60px;
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .admin-topbar-title {
+    font-size: 0.95rem;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-topbar-actions {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* Ocultar texto de botões secundários na topbar no mobile */
+  .admin-topbar-actions .btn-outline-adm span,
+  .admin-topbar-actions .btn-primary-adm span {
+    display: none;
+  }
+
+  .admin-topbar-actions .btn-outline-adm,
+  .admin-topbar-actions .btn-primary-adm {
+    padding: 8px 10px;
+  }
+
+  /* ---- BOTÃO HAMBÚRGUER ---- */
+  .admin-mobile-menu-btn {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  /* ---- ÁREA DE CONTEÚDO ---- */
+  .admin-content {
+    padding: 14px 12px;
+  }
+
+  /* ---- GRIDS DE ESTATÍSTICAS ---- */
+  .admin-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .admin-stat-card {
+    padding: 14px 14px;
+  }
+
+  .admin-stat-value {
+    font-size: 1.3rem;
+  }
+
+  .admin-stat-icon-wrap {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* ---- CARDS ---- */
+  .admin-card {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  /* ---- TABELAS — forçar scroll horizontal ---- */
+  .admin-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-table {
+    min-width: 500px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+  }
+
+  /* ---- KDS MOBILE (Cozinha no celular) ---- */
+  .kds-tv-shell {
+    padding: 10px;
+  }
+
+  .kds-tv-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+  }
+
+  .kds-tv-title {
+    font-size: 1rem;
+    flex: 1;
+  }
+
+  .kds-clock {
+    font-size: 1.1rem;
+    padding: 3px 10px;
+  }
+
+  .kds-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .kds-order-id {
+    font-size: 1.1rem;
+  }
+
+  .kds-timer {
+    font-size: 0.95rem;
+  }
+
+  .kds-item-title {
+    font-size: 1rem;
+  }
+
+  .kds-btn {
+    padding: 12px 8px;
+    font-size: 0.85rem;
+    gap: 6px;
+  }
+
+  /* ---- BARRA FLUTUANTE DE TROCA DE VISÃO ---- */
+  .view-switcher-pill {
+    bottom: 14px;
+    right: 14px;
+    padding: 5px 8px;
+    gap: 4px;
+  }
+
+  .view-switcher-btn {
+    padding: 7px 10px;
+    font-size: 0.78rem;
+    gap: 5px;
+  }
+
+  .view-switcher-admin-name {
+    max-width: 60px;
+    font-size: 0.7rem;
+  }
+
+  /* ---- MODAIS DOS MANAGERS (Produtos, Promoções, Usuários, Financeiro) ---- */
+  .admin-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .admin-modal-card {
+    max-width: 100%;
+    max-height: 92dvh;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .admin-modal-body {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .admin-modal-header {
+    padding: 16px 18px;
+  }
+
+  /* ---- MODAL DE LOGIN ADMIN ---- */
+  .admin-login-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .admin-login-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 16px 16px;
+    padding: 24px 18px;
+  }
+
+  .admin-login-quick-btns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* ---- FORMULÁRIOS / MODAIS DOS MANAGERS ---- */
+  .admin-form-grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Assegurar que filtros de botões (role filter etc.) enrolem */
+  .admin-filter-bar,
+  .admin-tab-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+/* Telas muito pequenas (≤ 360px) */
+@media (max-width: 360px) {
+  .admin-grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-topbar-title {
+    font-size: 0.85rem;
+  }
+
+  .view-switcher-btn span {
+    display: none;
+  }
+
+  .view-switcher-btn {
+    padding: 7px 9px;
+  }
+}
+

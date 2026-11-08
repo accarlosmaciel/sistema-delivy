@@ -22,7 +22,6 @@ import { PRODUCTS, CATEGORIES, RESTAURANT_INFO, PROMO_COUPONS } from './data/pro
 import { ArrowRight, Search, Sparkles } from 'lucide-react';
 import SistemaControleApp from './sistema_controle/SistemaControleApp';
 import TelaCozinhaKDS from './sistema_controle/TelaCozinhaKDS';
-import ViewSwitcherBar from './sistema_controle/ViewSwitcherBar';
 import AdminLoginModal from './sistema_controle/AdminLoginModal';
 import { CentralStore } from './sistema_controle/store';
 import PwaInstallPrompt from './components/PwaInstallPrompt';
@@ -414,14 +413,6 @@ export default function App() {
     return (
       <>
         <SistemaControleApp onNavigateToClient={() => setCurrentView('client')} />
-        <ViewSwitcherBar 
-          activeView={currentView} 
-          onViewChange={handleViewChange} 
-          isAdmin={isAdmin}
-          adminUser={adminUser}
-          onOpenLogin={() => setIsAdminLoginOpen(true)}
-          onLogout={handleAdminLogout}
-        />
         <PwaInstallPrompt />
       </>
     );
@@ -436,14 +427,6 @@ export default function App() {
     return (
       <>
         <TelaCozinhaKDS onNavigateBack={() => setCurrentView('client')} />
-        <ViewSwitcherBar 
-          activeView={currentView} 
-          onViewChange={handleViewChange} 
-          isAdmin={isAdmin}
-          adminUser={adminUser}
-          onOpenLogin={() => setIsAdminLoginOpen(true)}
-          onLogout={handleAdminLogout}
-        />
         <PwaInstallPrompt />
       </>
     );
@@ -698,16 +681,6 @@ export default function App() {
 
       {/* Toast Notification */}
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
-
-      {/* Floating View Switcher Bar (Protegida por Autenticação) */}
-      <ViewSwitcherBar 
-        activeView={currentView} 
-        onViewChange={handleViewChange} 
-        isAdmin={isAdmin}
-        adminUser={adminUser}
-        onOpenLogin={() => setIsAdminLoginOpen(true)}
-        onLogout={handleAdminLogout}
-      />
 
       {/* PWA Install Prompt (Detecta exclusivamente celulares com controle de frequência) */}
       <PwaInstallPrompt />

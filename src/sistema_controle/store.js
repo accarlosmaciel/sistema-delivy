@@ -1,5 +1,6 @@
-// Gerenciador Central de Dados e Sincronização em Tempo Real (LocalStorage + BroadcastChannel)
+// Gerenciador Central de Dados e Sincronização Híbrida (LocalStorage + BroadcastChannel + Supabase Realtime & API)
 import { PRODUCTS as INITIAL_PRODUCTS, PROMO_COUPONS as INITIAL_COUPONS, RESTAURANT_INFO } from '../data/products';
+import { supabase } from '../lib/supabase/client';
 
 const SYNC_CHANNEL_NAME = 'delivy_realtime_bus';
 let broadcastChannel = null;
@@ -184,7 +185,7 @@ const SEED_USERS = [
     id: 'u-superadmin',
     name: 'Carlos Maciel (Master)',
     email: 'superadmin@delivy.com.br',
-    role: 'superadmin', // 'superadmin' | 'admin' | 'cliente' | 'kitchen'
+    role: 'superadmin',
     phone: '(11) 99999-0001',
     status: 'ativo',
     createdAt: '2026-01-10',
@@ -300,6 +301,8 @@ const SEED_EXPENSES = [
 
 // Funções Utilitárias de Armazenamento e Sincronização
 export const CentralStore = {
+  _realtimeInitialized: false,
+
   // Notificar outros ouvintes
   broadcast(action, payload) {
     if (broadcastChannel) {
@@ -319,6 +322,48 @@ export const CentralStore = {
     };
     broadcastChannel.addEventListener('message', handler);
     return () => broadcastChannel.removeEventListener('message', handler);
+  },
+
+  // Sincronização em tempo real via Supabase Realtime (se configurado)
+  initRealtime() {
+    if (this._realtimeInitialized || typeof window === 'undefined') return;
+    this._realtimeInitialized = true;
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    if (supabaseUrl && !supabaseUrl.includes('placeholder.supabase.co')) {
+      try {
+        const channel = supabase
+          .channel('delivy_kds_realtime')
+          .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'orders' },
+            async (payload) => {
+              // Quando um pedido mudar ou for inserido no banco de dados
+              await this.syncOrdersFromRemote();
+            }
+          )
+          .subscribe();
+      } catch (err) {
+        console.warn('Realtime Supabase em espera ou indisponível:', err);
+      }
+    }
+  },
+
+  // Sincroniza pedidos da API remota
+  async syncOrdersFromRemote() {
+    if (typeof window === 'undefined') return;
+    try {
+      const res = await fetch('/api/orders');
+      if (res.ok) {
+        const remoteOrders = await res.json();
+        if (Array.isArray(remoteOrders) && remoteOrders.length > 0) {
+          localStorage.setItem(KEYS.ORDERS, JSON.stringify(remoteOrders));
+          this.broadcast('ORDERS_UPDATED', remoteOrders);
+        }
+      }
+    } catch (e) {
+      // Falha silenciosa - fallback para local
+    }
   },
 
   // --- PRODUTOS & ESTOQUE ---
@@ -343,7 +388,7 @@ export const CentralStore = {
       // Inicializar com estoque padrão
       const seeded = INITIAL_PRODUCTS.map((p, idx) => ({
         ...p,
-        stock: p.stock !== undefined ? p.stock : (idx % 3 === 0 ? 8 : 25), // estoque realista
+        stock: p.stock !== undefined ? p.stock : (idx % 3 === 0 ? 8 : 25),
         isAvailable: p.isAvailable !== undefined ? p.isAvailable : true
       }));
       localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seeded));
@@ -374,6 +419,28 @@ export const CentralStore = {
     };
     const updated = [created, ...list];
     this.saveProducts(updated);
+
+    // Sincroniza em segundo plano com a API
+    if (typeof window !== 'undefined') {
+      fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: created.name,
+          description: created.description,
+          price: created.price,
+          originalPrice: created.originalPrice,
+          category: created.category,
+          stock: created.stock,
+          isAvailable: created.isAvailable,
+          featured: !!created.featured,
+          badge: created.badge,
+          image: created.image,
+          options: created.options || []
+        })
+      }).catch(() => {});
+    }
+
     return created;
   },
 
@@ -381,6 +448,16 @@ export const CentralStore = {
     const list = this.getProducts();
     const updated = list.map(p => (p.id === id ? { ...p, ...updates } : p));
     this.saveProducts(updated);
+
+    // Sincroniza em segundo plano com a API
+    if (typeof window !== 'undefined') {
+      fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      }).catch(() => {});
+    }
+
     return updated;
   },
 
@@ -388,6 +465,14 @@ export const CentralStore = {
     const list = this.getProducts();
     const updated = list.filter(p => p.id !== id);
     this.saveProducts(updated);
+
+    // Sincroniza em segundo plano com a API
+    if (typeof window !== 'undefined') {
+      fetch(`/api/products/${id}`, {
+        method: 'DELETE'
+      }).catch(() => {});
+    }
+
     return updated;
   },
 
@@ -396,11 +481,11 @@ export const CentralStore = {
     const list = this.getProducts();
     let changed = false;
     const updated = list.map(prod => {
-      const match = orderItems.find(item => item.product?.id === prod.id);
+      const match = orderItems.find(item => item.product?.id === prod.id || item.productId === prod.id);
       if (match) {
         changed = true;
         const currentStock = prod.stock !== undefined ? prod.stock : 20;
-        const newStock = Math.max(0, currentStock - match.quantity);
+        const newStock = Math.max(0, currentStock - (match.quantity || 1));
         return {
           ...prod,
           stock: newStock,
@@ -417,6 +502,7 @@ export const CentralStore = {
 
   // --- PEDIDOS (COZINHA & CLIENTE & DASHBOARD) ---
   getOrders() {
+    this.initRealtime();
     if (typeof window === 'undefined') return SEED_ORDERS;
     try {
       const saved = localStorage.getItem(KEYS.ORDERS);
@@ -442,7 +528,7 @@ export const CentralStore = {
     const list = this.getOrders();
     const fullOrder = {
       ...order,
-      id: order.id || `PED-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: order.id || order.orderId || `PED-${Math.floor(1000 + Math.random() * 9000)}`,
       date: order.date || new Date().toISOString(),
       status: order.status || 'received',
       elapsedMinutes: 0
@@ -450,7 +536,7 @@ export const CentralStore = {
     const updated = [fullOrder, ...list];
     this.saveOrders(updated);
 
-    // Baixa automática no estoque
+    // Baixa automática no estoque local
     if (fullOrder.items && fullOrder.items.length > 0) {
       this.decrementStockForOrder(fullOrder.items);
     }
@@ -461,12 +547,43 @@ export const CentralStore = {
     }
 
     this.broadcast('NEW_ORDER_RECEIVED', fullOrder);
+
+    // Persiste de forma assíncrona no backend / Supabase
+    if (typeof window !== 'undefined') {
+      const apiPayload = {
+        customerName: fullOrder.customer?.name || 'Cliente',
+        customerPhone: fullOrder.customer?.phone || '11999999999',
+        deliveryType: fullOrder.deliveryType || 'delivery',
+        street: fullOrder.customer?.street || '',
+        number: fullOrder.customer?.number || '',
+        neighborhood: fullOrder.customer?.neighborhood || '',
+        complement: fullOrder.customer?.complement || '',
+        paymentMethod: fullOrder.paymentMethod === 'credit' || fullOrder.paymentMethod === 'debit' ? 'card' : fullOrder.paymentMethod || 'pix',
+        changeFor: fullOrder.customer?.changeFor || null,
+        couponCode: fullOrder.couponCode || null,
+        items: (fullOrder.items || []).map((it) => ({
+          productId: it.product?.id || it.productId || 'b1',
+          quantity: it.quantity || 1,
+          selectedOptions: it.options || {},
+          notes: it.notes || null
+        }))
+      };
+
+      fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(apiPayload)
+      }).catch((err) => {
+        console.warn('API /api/orders em fallback local:', err);
+      });
+    }
+
     return fullOrder;
   },
 
   updateOrderStatus(orderId, newStatus) {
     const list = this.getOrders();
-    const updated = list.map(o => (o.id === orderId ? { ...o, status: newStatus } : o));
+    const updated = list.map(o => (o.id === orderId || o.orderId === orderId ? { ...o, status: newStatus } : o));
     this.saveOrders(updated);
 
     // Sincronizar também com activeOrder do cliente se for o pedido atual dele
@@ -474,13 +591,22 @@ export const CentralStore = {
       const activeStr = localStorage.getItem(KEYS.ACTIVE_ORDER);
       if (activeStr) {
         const active = JSON.parse(activeStr);
-        if (active.id === orderId) {
+        if (active.id === orderId || active.orderId === orderId) {
           active.status = newStatus;
           localStorage.setItem(KEYS.ACTIVE_ORDER, JSON.stringify(active));
           this.broadcast('ACTIVE_ORDER_UPDATED', active);
         }
       }
     } catch (e) {}
+
+    // Sincroniza com a API Next.js / Supabase
+    if (typeof window !== 'undefined') {
+      fetch(`/api/orders/${orderId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      }).catch(() => {});
+    }
 
     return updated;
   },
@@ -510,11 +636,30 @@ export const CentralStore = {
 
   saveCoupon(code, couponData) {
     const current = this.getCoupons();
+    const cleanCode = code.toUpperCase();
     const updated = {
       ...current,
-      [code.toUpperCase()]: couponData
+      [cleanCode]: couponData
     };
     this.saveCoupons(updated);
+
+    // Sincroniza com API
+    if (typeof window !== 'undefined') {
+      fetch('/api/coupons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: cleanCode,
+          description: couponData.desc || null,
+          discountType: couponData.type === 'frete' ? 'freedelivery' : (couponData.type === 'percent' ? 'percent' : 'fixed'),
+          discountPercent: couponData.type === 'percent' ? couponData.value : null,
+          discountValue: couponData.type === 'fixed' ? couponData.value : null,
+          freeDelivery: couponData.type === 'frete',
+          minSubtotal: couponData.minSubtotal || 0
+        })
+      }).catch(() => {});
+    }
+
     return updated;
   },
 
@@ -523,6 +668,13 @@ export const CentralStore = {
     const copy = { ...current };
     delete copy[code];
     this.saveCoupons(copy);
+
+    if (typeof window !== 'undefined') {
+      fetch(`/api/coupons/${code}`, {
+        method: 'DELETE'
+      }).catch(() => {});
+    }
+
     return copy;
   },
 
@@ -559,6 +711,15 @@ export const CentralStore = {
     };
     const updated = [created, ...list];
     this.saveUsers(updated);
+
+    if (typeof window !== 'undefined') {
+      fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(created)
+      }).catch(() => {});
+    }
+
     return created;
   },
 
@@ -566,6 +727,15 @@ export const CentralStore = {
     const list = this.getUsers();
     const updated = list.map(u => (u.id === id ? { ...u, ...updates } : u));
     this.saveUsers(updated);
+
+    if (typeof window !== 'undefined') {
+      fetch(`/api/users/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      }).catch(() => {});
+    }
+
     return updated;
   },
 
@@ -573,6 +743,13 @@ export const CentralStore = {
     const list = this.getUsers();
     const updated = list.filter(u => u.id !== id);
     this.saveUsers(updated);
+
+    if (typeof window !== 'undefined') {
+      fetch(`/api/users/${id}`, {
+        method: 'DELETE'
+      }).catch(() => {});
+    }
+
     return updated;
   },
 
@@ -616,7 +793,7 @@ export const CentralStore = {
     try {
       const saved = localStorage.getItem(KEYS.CURRENT_USER);
       if (saved) return JSON.parse(saved);
-      return SEED_USERS[0]; // Superadmin padrão
+      return SEED_USERS[0];
     } catch (e) {
       return SEED_USERS[0];
     }
@@ -664,6 +841,22 @@ export const CentralStore = {
     };
     const updated = [created, ...list];
     this.saveExpenses(updated);
+
+    if (typeof window !== 'undefined') {
+      fetch('/api/expenses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category: created.category,
+          description: created.description,
+          amount: created.amount,
+          paymentMethod: created.paymentMethod || 'pix',
+          status: created.status || 'pago',
+          date: created.date
+        })
+      }).catch(() => {});
+    }
+
     return created;
   },
 
@@ -671,11 +864,17 @@ export const CentralStore = {
     const list = this.getExpenses();
     const updated = list.filter(e => e.id !== id);
     this.saveExpenses(updated);
+
+    if (typeof window !== 'undefined') {
+      fetch(`/api/expenses/${id}`, {
+        method: 'DELETE'
+      }).catch(() => {});
+    }
+
     return updated;
   },
 
   // --- AUTENTICAÇÃO DE ADMIN ---
-  // Senhas padrão dos usuários do sistema (em produção, usar hash + backend)
   _defaultPasswords: {
     'superadmin@delivy.com.br': 'admin123',
     'roberto@delivygourmet.com': 'admin123',
@@ -719,6 +918,15 @@ export const CentralStore = {
       localStorage.setItem('delivy_admin_session', JSON.stringify(session));
       this.setCurrentUser(user);
       this.broadcast('ADMIN_LOGGED_IN', session);
+
+      // Opcionalmente sincroniza login com backend route
+      if (typeof window !== 'undefined') {
+        fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        }).catch(() => {});
+      }
     } catch (e) {}
 
     return { success: true, user: session };
@@ -728,6 +936,10 @@ export const CentralStore = {
     try {
       localStorage.removeItem('delivy_admin_session');
       this.broadcast('ADMIN_LOGGED_OUT', null);
+
+      if (typeof window !== 'undefined') {
+        fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+      }
     } catch (e) {}
   },
 

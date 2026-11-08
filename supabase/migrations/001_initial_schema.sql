@@ -211,3 +211,4 @@ CREATE INDEX IF NOT EXISTS idx_profiles_phone ON public.profiles(phone);
 
 -- Habilitar Realtime para a tabela de pedidos (KDS e Cliente)
 ALTER PUBLICATION supabase_realtime ADD TABLE public.orders;
+

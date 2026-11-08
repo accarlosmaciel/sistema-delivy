@@ -148,3 +148,4 @@ DROP TRIGGER IF EXISTS trg_order_customer_metrics ON public.orders;
 CREATE TRIGGER trg_order_customer_metrics
     AFTER INSERT ON public.orders
     FOR EACH ROW EXECUTE FUNCTION public.handle_customer_metrics_on_order();
+

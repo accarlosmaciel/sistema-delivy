@@ -400,3 +400,4 @@ src/
 - **Não alterar cores ou variáveis:** Manter estritamente as classes CSS e variáveis já consolidadas em `index.css` e `sistema_controle.css`.
 - **Manter Lucide React:** Não importar outras bibliotecas de ícones (como FontAwesome, Heroicons ou React Icons).
 - **Preservar a identidade visual:** Ao conectar os formulários e listagens ao Supabase, a interface visual deve permanecer 100% idêntica à experiência atual.
+

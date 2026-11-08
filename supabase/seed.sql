@@ -372,3 +372,4 @@ INSERT INTO public.order_items (order_id, product_id, product_name, unit_price, 
 ('PED-1080', 'c1', 'Combo Casal Gourmet', 89.90, 1, '{"Bebida 1": "Coca-Cola Zero 350ml", "Bebida 2": "Guaraná Antarctica 350ml"}'::jsonb, 'Caprichar no bacon!', 89.90),
 ('PED-1079', 'b2', 'Smash Cheddar Melt Duplo', 32.90, 2, '{}'::jsonb, NULL, 65.80),
 ('PED-1078', 'p1', 'Pizza Margherita Especial DOC', 68.00, 1, '{}'::jsonb, NULL, 68.00);
+

@@ -12,7 +12,7 @@ export const couponService = {
       }
 
       const map: Record<string, any> = {};
-      data.forEach((c) => {
+      (data as any[]).forEach((c) => {
         map[c.code] = {
           code: c.code,
           description: c.description,
@@ -50,7 +50,7 @@ export const couponService = {
   async createCoupon(payload: any): Promise<Coupon> {
     const supabase = createAdminClient();
     const cleanCode = payload.code.trim().toUpperCase();
-    const newCoupon = {
+    const newCoupon: any = {
       code: cleanCode,
       description: payload.description || null,
       discount_type: payload.discountType || 'percent',

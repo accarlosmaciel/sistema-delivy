@@ -83,3 +83,4 @@ export const AdminLoginSchema = z.object({
   email: z.string().email('E-mail em formato inválido'),
   password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres')
 });
+

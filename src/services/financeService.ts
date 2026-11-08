@@ -19,7 +19,7 @@ export const financeService = {
 
   async createExpense(payload: any): Promise<Expense> {
     const supabase = createAdminClient();
-    const newExpense = {
+    const newExpense: any = {
       id: payload.id || `exp-${Date.now()}`,
       restaurant_id: 'a0000000-0000-0000-0000-000000000001',
       category: payload.category,
@@ -50,10 +50,10 @@ export const financeService = {
     const { data: orders } = await supabase.from('orders').select('grand_total, subtotal, discount_amount, payment_method, status');
     const { data: expenses } = await supabase.from('expenses').select('amount');
 
-    const completed = (orders || []).filter((o) => o.status !== 'cancelled');
+    const completed = ((orders || []) as any[]).filter((o) => o.status !== 'cancelled');
     const totalRevenue = completed.reduce((sum, o) => sum + Number(o.grand_total || 0), 0);
     const totalDiscounts = completed.reduce((sum, o) => sum + Number(o.discount_amount || 0), 0);
-    const totalExpenses = (expenses || []).reduce((sum, e) => sum + Number(e.amount || 0), 0);
+    const totalExpenses = ((expenses || []) as any[]).reduce((sum, e) => sum + Number(e.amount || 0), 0);
     const netProfit = totalRevenue - totalExpenses;
     const margin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
 

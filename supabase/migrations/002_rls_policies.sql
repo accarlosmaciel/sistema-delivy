@@ -239,3 +239,4 @@ CREATE POLICY "Clientes podem gerenciar seus próprios endereços"
     TO authenticated
     USING (profile_id = auth.uid() OR public.is_admin_or_superadmin())
     WITH CHECK (profile_id = auth.uid() OR public.is_admin_or_superadmin());
+

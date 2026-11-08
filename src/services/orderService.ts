@@ -1,7 +1,7 @@
 import { createAdminClient } from '../lib/supabase/admin';
 import { productService } from './productService';
 import { couponService } from './couponService';
-import type { CreateOrderDTO, Order } from '../types';
+import type { CreateOrderDTO } from '../types';
 
 export const orderService = {
   async getOrders(filters?: { status?: string; limit?: number }): Promise<any[]> {
@@ -30,7 +30,7 @@ export const orderService = {
       const { data, error } = await query;
       if (error || !data) return [];
 
-      return data.map((o: any) => ({
+      return (data as any[]).map((o: any) => ({
         id: o.id,
         orderId: o.id,
         date: o.created_at,
@@ -70,7 +70,7 @@ export const orderService = {
 
   async getOrderById(id: string): Promise<any | null> {
     const supabase = createAdminClient();
-    const { data: o, error } = await supabase
+    const { data, error } = await supabase
       .from('orders')
       .select(`
         *,
@@ -79,7 +79,8 @@ export const orderService = {
       .eq('id', id)
       .single();
 
-    if (error || !o) return null;
+    if (error || !data) return null;
+    const o = data as any;
 
     return {
       id: o.id,
@@ -126,10 +127,8 @@ export const orderService = {
         throw new Error(`Produto não encontrado: ${item.productId}`);
       }
 
-      // Preço unitário base
       let unitPrice = Number(prod.price);
 
-      // Calcular adicionais extras
       if (item.selectedOptions) {
         Object.values(item.selectedOptions).forEach((val: any) => {
           if (Array.isArray(val)) {
@@ -157,7 +156,7 @@ export const orderService = {
       });
     }
 
-    // 2. Taxa de entrega (grátis se >= 70 ou se pickup)
+    // 2. Taxa de entrega
     let deliveryFee = dto.deliveryType === 'pickup' ? 0 : (subtotal >= 70 ? 0 : 4.90);
 
     // 3. Validação de Cupom
@@ -176,7 +175,7 @@ export const orderService = {
       }
     }
 
-    // 4. Desconto PIX (5%)
+    // 4. Desconto PIX
     let intermediateTotal = Math.max(0, subtotal + deliveryFee - discountAmount);
     let pixDiscount = dto.paymentMethod === 'pix' ? intermediateTotal * 0.05 : 0;
     let grandTotal = Math.max(0, intermediateTotal - pixDiscount);
@@ -184,7 +183,7 @@ export const orderService = {
     // 5. Inserir Pedido
     const orderId = `PED-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    const newOrderPayload = {
+    const newOrderPayload: any = {
       id: orderId,
       restaurant_id: 'a0000000-0000-0000-0000-000000000001',
       customer_name: dto.customerName,
@@ -220,13 +219,13 @@ export const orderService = {
       ...item
     }));
 
-    const { error: itemsError } = await supabase.from('order_items').insert(itemsPayload);
+    const { error: itemsError } = await supabase.from('order_items').insert(itemsPayload as any);
     if (itemsError) {
       console.error('Erro ao registrar itens do pedido:', itemsError);
     }
 
     return {
-      ...createdOrder,
+      ...(createdOrder as any || newOrderPayload),
       orderId,
       customer: {
         name: dto.customerName,
@@ -250,7 +249,7 @@ export const orderService = {
     const supabase = createAdminClient();
     const { error } = await supabase
       .from('orders')
-      .update({ status: status as any, updated_at: new Date().toISOString() })
+      .update({ status: status as any, updated_at: new Date().toISOString() } as any)
       .eq('id', id);
 
     if (error) {

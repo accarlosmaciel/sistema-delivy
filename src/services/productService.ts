@@ -22,8 +22,7 @@ export const productService = {
 
       const { data, error } = await query;
 
-      if (error || !data || data.length === 0) {
-        // Fallback robusto para dados iniciais caso Supabase ainda não esteja com seed
+      if (error || !data || (data as any[]).length === 0) {
         let list = INITIAL_PRODUCTS.map((p) => ({
           id: p.id,
           restaurant_id: 'a0000000-0000-0000-0000-000000000001',
@@ -77,7 +76,7 @@ export const productService = {
   async createProduct(payload: any): Promise<Product> {
     const supabase = createAdminClient();
     const id = payload.id || `prod-${Date.now()}`;
-    const newProduct = {
+    const newProduct: any = {
       id,
       restaurant_id: payload.restaurant_id || 'a0000000-0000-0000-0000-000000000001',
       category_id: payload.category || payload.category_id,

@@ -60,8 +60,11 @@ export default function App() {
   // Toast notification
   const [toastMessage, setToastMessage] = useState('');
 
+  const [visibleCount, setVisibleCount] = useState(10);
   const searchInputRef = useRef(null);
   const catalogRef = useRef(null);
+  const catalogScrollRef = useRef(null);
+  const sentinelRef = useRef(null);
 
   // Load persisted state safely on client mount
   useEffect(() => {
@@ -252,9 +255,10 @@ export default function App() {
   const handleSelectHomeCategory = (categoryId) => {
     setActiveCategory(categoryId);
     setSearchTerm('');
+    setVisibleCount(10);
 
-    if (catalogRef.current) {
-      catalogRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (catalogScrollRef.current) {
+      catalogScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -269,8 +273,10 @@ export default function App() {
       setActiveCategory('destaques');
     }
 
-    if (catalogRef.current) {
-      catalogRef.current.scrollIntoView({ behavior: 'smooth' });
+    setVisibleCount(10);
+
+    if (catalogScrollRef.current) {
+      catalogScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -333,6 +339,43 @@ export default function App() {
 
     return matchesCategory && matchesSearch;
   });
+
+  // Produtos fatiados de 10 em 10 para rolagem progressiva
+  const displayedProducts = filteredProducts.slice(0, visibleCount);
+
+  // Reiniciar paginação de 10 em 10 sempre que mudar categoria ou termo de busca
+  useEffect(() => {
+    setVisibleCount(10);
+    if (catalogScrollRef.current) {
+      catalogScrollRef.current.scrollTop = 0;
+    }
+  }, [activeCategory, searchTerm]);
+
+  // Observer para carregar automaticamente mais 10 produtos ao rolar até o fim da lista
+  useEffect(() => {
+    const target = sentinelRef.current;
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleCount < filteredProducts.length) {
+          setVisibleCount((prev) => Math.min(prev + 10, filteredProducts.length));
+        }
+      },
+      { root: catalogScrollRef.current, rootMargin: '120px' }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [visibleCount, filteredProducts.length]);
+
+  // Handler de rolagem manual da listagem
+  const handleListScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    if (scrollTop + clientHeight >= scrollHeight - 120) {
+      if (visibleCount < filteredProducts.length) {
+        setVisibleCount((prev) => Math.min(prev + 10, filteredProducts.length));
+      }
+    }
+  };
 
   const handleViewChange = (targetView) => {
     if ((targetView === 'admin' || targetView === 'kitchen') && !isAdmin) {
@@ -408,84 +451,95 @@ export default function App() {
 
   return (
     <div className="delivy-mobile-container">
-      {/* 1. Top Bar: Greeting, Address Selector, VIP Club, Notification Bell */}
-      <HomeHeader
-        currentAddress={currentAddress}
-        userName="Carlos"
-        unreadNotifications={unreadNotifications}
-        onOpenAddress={() => setIsAddressOpen(true)}
-        onOpenClub={() => setIsClubOpen(true)}
-        onOpenNotifications={() => {
-          setIsNotificationsOpen(true);
-          setUnreadNotifications(0);
-        }}
-        cartCount={cartCount}
-        cartTotal={finalTotal}
-        onOpenCart={() => setIsCartOpen(true)}
-        onOpenAdminLogin={() => {
-          if (isAdmin) {
-            setCurrentView('admin');
-          } else {
-            setIsAdminLoginOpen(true);
-          }
-        }}
-      />
-
-      {/* 2. Quick Categories (Restaurantes, Mercados, Bebidas, etc.) */}
-      <HomeCategories
-        activeCategory={activeCategory}
-        onSelectCategory={handleSelectHomeCategory}
-      />
-
-      {/* 3. Hero Carousel Banner ("tudo a partir de R$ 0,90") */}
-      <HeroBanner 
-        onBannerClick={handlePromoFilter} 
-      />
-
-      {/* 6. Search Bar & Cardápio / Restaurantes Catalog */}
-      <section className="catalog-section-container" ref={catalogRef}>
-        <div className="search-bar-wrapper">
-          <Search size={18} className="search-bar-icon" />
-          <input
-            ref={searchInputRef}
-            type="text"
-            className="search-bar-input"
-            placeholder="Buscar em pratos, esfihas ou bebidas..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {searchTerm && (
-            <button className="search-clear-btn" onClick={() => setSearchTerm('')}>
-              ×
-            </button>
-          )}
-        </div>
-
-        {/* Category Pills Navigation */}
-        <CategoryNav
-          activeCategory={activeCategory}
-          onSelectCategory={setActiveCategory}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          productsCount={filteredProducts.length}
+      {/* Top Fixed Screen: Cabeçalho, Categorias Rápidas, Banner e Controles de Busca */}
+      <div className="delivy-fixed-screen-header">
+        {/* 1. Top Bar: Greeting, Address Selector, VIP Club, Notification Bell */}
+        <HomeHeader
+          currentAddress={currentAddress}
+          userName="Carlos"
+          unreadNotifications={unreadNotifications}
+          onOpenAddress={() => setIsAddressOpen(true)}
+          onOpenClub={() => setIsClubOpen(true)}
+          onOpenNotifications={() => {
+            setIsNotificationsOpen(true);
+            setUnreadNotifications(0);
+          }}
+          cartCount={cartCount}
+          cartTotal={finalTotal}
+          onOpenCart={() => setIsCartOpen(true)}
+          onOpenAdminLogin={() => {
+            if (isAdmin) {
+              setCurrentView('admin');
+            } else {
+              setIsAdminLoginOpen(true);
+            }
+          }}
         />
 
-        {/* Products Section Header */}
-        <div className="section-header">
-          <h2 className="section-title">
-            <CategoryIcon 
-              name={CATEGORIES.find((c) => c.id === activeCategory)?.icon || 'Sparkles'} 
-              size={15} 
-              style={{ color: '#ea1d2c' }} 
-            />
-            <span>{CATEGORIES.find((c) => c.id === activeCategory)?.name || 'Destaques'}</span>
-          </h2>
-          <span className="products-count-label">
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'itens'}
-          </span>
-        </div>
+        {/* 2. Quick Categories (Restaurantes, Mercados, Bebidas, etc.) */}
+        <HomeCategories
+          activeCategory={activeCategory}
+          onSelectCategory={handleSelectHomeCategory}
+        />
 
-        {/* Products Grid */}
+        {/* 3. Hero Carousel Banner ("tudo a partir de R$ 0,90") */}
+        <HeroBanner 
+          onBannerClick={handlePromoFilter} 
+        />
+
+        {/* 4. Controles do Cardápio Fixos: Busca, Pílulas de Categoria e Cabeçalho */}
+        <div className="catalog-header-sticky">
+          <div className="search-bar-wrapper">
+            <Search size={18} className="search-bar-icon" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="search-bar-input"
+              placeholder="Buscar em pratos, esfihas ou bebidas..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button className="search-clear-btn" onClick={() => setSearchTerm('')}>
+                ×
+              </button>
+            )}
+          </div>
+
+          {/* Category Pills Navigation */}
+          <CategoryNav
+            activeCategory={activeCategory}
+            onSelectCategory={setActiveCategory}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            productsCount={filteredProducts.length}
+          />
+
+          {/* Products Section Header */}
+          <div className="section-header">
+            <h2 className="section-title">
+              <CategoryIcon 
+                name={CATEGORIES.find((c) => c.id === activeCategory)?.icon || 'Sparkles'} 
+                size={15} 
+                style={{ color: '#ea1d2c' }} 
+              />
+              <span>{CATEGORIES.find((c) => c.id === activeCategory)?.name || 'Destaques'}</span>
+            </h2>
+            <span className="products-count-label">
+              {filteredProducts.length > 10
+                ? `${Math.min(visibleCount, filteredProducts.length)} de ${filteredProducts.length} itens`
+                : `${filteredProducts.length} ${filteredProducts.length === 1 ? 'item' : 'itens'}`}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. Área de Rolagem Exclusiva da Listagem de Produtos (de 10 em 10) */}
+      <div 
+        className="catalog-products-scroll-area" 
+        ref={catalogScrollRef}
+        onScroll={handleListScroll}
+      >
         {filteredProducts.length === 0 ? (
           <div className="empty-catalog-box">
             <p className="empty-title">Nenhum produto encontrado</p>
@@ -493,7 +547,7 @@ export default function App() {
           </div>
         ) : (
           <div className="products-grid">
-            {filteredProducts.map((product) => {
+            {displayedProducts.map((product) => {
               const inCartQty = cartItems
                 .filter((item) => item.product.id === product.id)
                 .reduce((a, b) => a + b.quantity, 0);
@@ -511,7 +565,27 @@ export default function App() {
             })}
           </div>
         )}
-      </section>
+
+        {/* Sentinel e Botão Carregar Mais (+10) */}
+        {visibleCount < filteredProducts.length && (
+          <div className="catalog-load-more-wrapper" ref={sentinelRef}>
+            <button 
+              type="button" 
+              className="catalog-load-more-btn"
+              onClick={() => setVisibleCount((prev) => Math.min(prev + 10, filteredProducts.length))}
+            >
+              <span>Mostrar mais produtos (+10)</span>
+              <span className="load-more-counter">{Math.min(visibleCount, filteredProducts.length)} de {filteredProducts.length}</span>
+            </button>
+          </div>
+        )}
+
+        {visibleCount >= filteredProducts.length && filteredProducts.length > 0 && (
+          <div className="catalog-end-message">
+            <span>✨ Fim da lista — todos os {filteredProducts.length} produtos exibidos</span>
+          </div>
+        )}
+      </div>
 
       {/* Floating Cart Button for Mobile if Cart has items */}
       {cartCount > 0 && !isCartOpen && (
